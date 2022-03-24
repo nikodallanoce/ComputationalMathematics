@@ -21,8 +21,8 @@ len = size(X, 2);
 s = [];
 y = [];
 x_next=zeros(length(xk));
-
-while(norm(grad_k)>tol)
+norm_y= 9999;
+while(norm(grad_k)>tol && norm_y>tol)
     if mod(k, 50)==0
         disp(k)
     end
@@ -41,8 +41,6 @@ while(norm(grad_k)>tol)
     k=k+1;
 
     % if the last gradient didn't have a great change from the previous
-    if norm(y(end))<=tol
-        break;
-    end
+    norm_y = norm(y(end));
 end
 end
