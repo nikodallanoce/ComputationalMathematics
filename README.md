@@ -1,5 +1,5 @@
 # ComputationalMathematics
-Computational mathematics for learning and data analysis project for a.y. 2021/2022.
+Computational Mathematics for Learning and Data Analysis project for the a.y. 2021/2022.
 ## Group Members
 - [Niko Dalla Noce](https://github.com/nikodallanoce)
 - [Alessandro Ristori](https://github.com/RistoAle97)

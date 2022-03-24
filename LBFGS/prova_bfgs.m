@@ -1,29 +1,24 @@
 clear;
 rng(1);
 
-micheli = readtable('ML-CUP21-TR.csv');
-micheli = table2array(micheli);
-micheli = micheli(:, 2:end);
+% Build the X matrix from the dataset
+dataset = readtable('ML-CUP21-TR.csv');
+dataset = table2array(dataset);
+X = dataset(:, 2:end);
 
-[m, n0] = size(micheli);
-micheli_hat = [micheli'; eye(m)];
+% Build \hat_{X} and \hat_{y}
+[m, n0] = size(X);
+X = [X'; eye(m)];
+[m, n] = size(X);
+y = [randn(n0, 1); zeros(m-n0, 1)];
 
-[m, n] = size(micheli_hat);
-
-%m = 10000;
-%n = 100;
-%X = randn(m, n);
-X = micheli_hat;
 w = randn(n, 1);
-z = [randn(n0,1); zeros(m-n0,1)];
-%grad = 2.*w'*(X'*X) - 2.*y'*X;
-grad = @(x) 2.*x'*X'*X - 2.*z'*X;
-f= @(x) x'*X'*X*x - 2.*z'*X*x+z'*z;
 
-l = 15;
+grad_lls = @(x) 2.*x'*(X'*X) - 2.*y'*X;
+f_lls = @(x) x'*(X'*X)*x - 2.*y'*X*x + y'*y;
 
-ris = X\z;
+l = 19;
 
-[w, k] = LBFGS(w, f, X, grad, l, 1e-3);
-%disp(k);
-%r = compute_direction(grad', s, y, n, 3);
+ris = X\y;
+
+[w, k] = LBFGS(w, f_lls, X, grad_lls, l, 1e-8);
