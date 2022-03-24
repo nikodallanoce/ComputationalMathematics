@@ -14,11 +14,15 @@ y = [randn(n0, 1); zeros(m-n0, 1)];
 
 w = randn(n, 1);
 
-grad_lls = @(x) 2.*x'*(X'*X) - 2.*y'*X;
-f_lls = @(x) x'*(X'*X)*x - 2.*y'*X*x + y'*y;
+XtX=(X'*X);
+ytX2= 2.*y'*X;
+yty=y'*y;
+
+grad_lls = @(x) 2.*x'*XtX - ytX2;
+f_lls = @(x) x'*XtX*x - ytX2*x + yty;
 
 l = 19;
 
-ris = X\y;
+%ris = X\y;
 
 [w, k] = LBFGS(w, f_lls, X, grad_lls, l, 1e-8);
