@@ -30,14 +30,15 @@ while(norm(grad_k)>tol && norm_y>tol)
     pk = -compute_direction(grad_k, s, y, I, k); % search direction
     alpha = BLS(f, grad, @(alpha)xk + alpha.*pk, 1e-4, 0.5, 1, xk);
     x_next = xk + alpha.*pk;
-    yk = grad(x_next)' - grad_k;
+    grad_next = grad(x_next)';
+    yk = grad_next - grad_k;
 
     % if k exceeds the available memory, remove the oldest s and y
 
     [s,y] = memory_handling(s, y, xk, x_next, yk, k, l);
 
     % update the parameters
-    grad_k=grad(x_next)';
+    grad_k = grad_next;
     xk=x_next;
     k=k+1;
 
