@@ -1,28 +1,40 @@
 function r = compute_direction(gradient, s, y, n, k)
+%{
+Computes the search direction, p, for the current iteration of the LBFGS
+method.
+Input:
+    gradient: (array) gradient of the function evaluated at the current point
+    s: (matrix) l displacements defined as y_k=x_{k+1}-x_k, each displacement
+    is a column
+    y: (matrix) l difference between gradients defined as y_k=\nabla
+    f_{k+1}-\nabla f_{k}, each element is a column
+    n: (int) dimension of the eye matrix
+    k: (integer) current iteration
+Output:
+    r: (array) current search direction defined as H_k \nabla f_k
+%}
 
 q = gradient;
-[~,nc] = size(s);
+[~, nc] = size(s);
 alpha = zeros(nc);
 rho = zeros(nc);
 
-for i = nc: -1: 1
-    rho(i) = 1/(y(:,i)'*s(:,i));
-    alpha(i) = rho(i).* s(:,i)' * q;
-    q = q - alpha(i).* y(:,i);
+for i = nc:-1:1
+    rho(i) = 1/(y(:, i)'*s(:, i));
+    alpha(i) = rho(i).* s(:, i)' * q;
+    q = q - alpha(i).* y(:, i);
 end
 
 gamma = 1;
 if(k>0)
-    gamma = s(:,nc)'*y(:,nc) / norm(y(:,nc))^2;
+    gamma = s(:, nc)'*y(:, nc) / norm(y(:, nc))^2;
 end
 
 H0 = gamma * eye(n);
 r = H0 * q;
 
 for i = 1:nc
-    %rho = 1/(y(:,i)'*s(:,i));
-    beta= rho(i) * y(:,i)' * r;
-    %alpha = rho * s(:,i)' * q;
-    r = r + s(:,i)*(alpha(i) - beta);
+    beta= rho(i) * y(:, i)' * r;
+    r = r + s(:, i)*(alpha(i) - beta);
 end
 end
