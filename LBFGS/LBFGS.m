@@ -22,11 +22,12 @@ s = [];
 y = [];
 x_next=zeros(length(xk));
 norm_y= 9999;
+I = eye(len);
 while(norm(grad_k)>tol && norm_y>tol)
     if mod(k, 50)==0
         disp(k)
     end
-    pk = -compute_direction(grad_k, s, y, len, k); % search direction
+    pk = -compute_direction(grad_k, s, y, I, k); % search direction
     alpha = BLS(f, grad, @(alpha)xk + alpha.*pk, 1e-4, 0.5, 1, xk);
     x_next = xk + alpha.*pk;
     yk = grad(x_next)' - grad_k;
