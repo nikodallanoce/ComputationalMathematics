@@ -17,32 +17,27 @@ Ouptut:
 xk=x0;
 k=0; % number of iterations
 grad_k = grad(x0)';
-len = size(X, 2);
 s = [];
 y = [];
 x_next=zeros(length(xk));
 norm_y= 9999;
-I = eye(len);
+I = eye(size(X, 2));
 while(norm(grad_k)>tol && norm_y>tol)
-    if mod(k, 50)==0
-        disp(k)
-    end
     pk = -compute_direction(grad_k, s, y, I, k); % search direction
     alpha = BLS(f, grad, @(alpha)xk + alpha.*pk, 1e-4, 0.5, 1, xk);
     x_next = xk + alpha.*pk;
     grad_next = grad(x_next)';
     yk = grad_next - grad_k;
 
-    % if k exceeds the available memory, remove the oldest s and y
-
+    % if k exceeds the available memory, update the arrays inside it
     [s,y] = memory_handling(s, y, xk, x_next, yk, k, l);
 
     % update the parameters
-    grad_k = grad_next;
+    grad_k=grad_next;
     xk=x_next;
     k=k+1;
 
-    % if the last gradient didn't have a great change from the previous
+    % if the last gradient didn't have a great change from the previous one
     norm_y = norm(y(end));
 end
 end

@@ -8,8 +8,8 @@ Input:
     is a column
     y: (matrix) l difference between gradients defined as y_k=\nabla
     f_{k+1}-\nabla f_{k}, each element is a column
-    n: (int) dimension of the eye matrix
-    k: (integer) current iteration
+    I: (matrix) nxn identity matrix
+    k: (int) current iteration
 Output:
     r: (array) current search direction defined as H_k \nabla f_k
 %}
