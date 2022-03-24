@@ -32,13 +32,8 @@ while(norm(grad_k)>tol)
     yk = grad(x_next)' - grad_k;
 
     % if k exceeds the available memory, remove the oldest s and y
-    if k > l
-        s = [s(:,2:end) x_next-xk];
-        y = [y(:, 2:end) yk];
-    else
-        s= [s x_next-xk];
-        y = [y yk];
-    end
+
+    [s,y] = memory_handling(s, y, xk, x_next, yk, k, l);
 
     % update the parameters
     grad_k=grad(x_next)';
