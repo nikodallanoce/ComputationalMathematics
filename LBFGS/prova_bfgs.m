@@ -2,7 +2,8 @@ clear;
 rng(1);
 
 % Build the X matrix from the dataset
-dataset = readtable('../datasets/ML-CUP21-TR.csv');
+full_path = 'C:/Users/Simone/Documents/ComputationalMathematics/datasets';
+dataset = readtable(strcat(full_path,'/ML-CUP21-TR.csv'));
 dataset = table2array(dataset);
 X = dataset(:, 2:end);
 
