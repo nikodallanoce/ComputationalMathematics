@@ -24,7 +24,8 @@ norm_y= 9999;
 I = eye(size(X, 2));
 while(norm(grad_k)>tol && norm_y>tol)
     pk = -compute_direction(grad_k, s, y, I, k); % search direction
-    alpha = BLS(f, grad, @(alpha)xk + alpha.*pk, 1e-4, 0.5, 1, xk);
+    % alpha = ArmijoWolf(f, grad, @(alpha)xk + alpha.*pk, 1e-4, 1e-3, 0.5, 1, pk);
+    alpha = BLS(f, grad, @(alpha)xk + alpha.*pk, 1e-4, 0.5, 1);
     x_next = xk + alpha.*pk;
     grad_next = grad(x_next)';
     yk = grad_next - grad_k;
