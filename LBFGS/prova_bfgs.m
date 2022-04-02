@@ -1,15 +1,14 @@
 clear;
-rng(1);
+% rng(1);
 
 % Build the X matrix from the dataset
-full_path = 'C:/Users/Simone/Documents/ComputationalMathematics/datasets';
-dataset = readtable(strcat(full_path,'/ML-CUP21-TR.csv'));
+dataset = readtable("../datasets/ML-CUP21-TR.csv");
 dataset = table2array(dataset);
 X = dataset(:, 2:end);
 
 % Build \hat_{X} and \hat_{y}
 [m, n0] = size(X);
-lambda = 1e-5;
+lambda = 1e-1;
 X = [X'; lambda.*eye(m)];
 [m, n] = size(X);
 y = [randn(n0, 1); zeros(m-n0, 1)];
@@ -28,10 +27,16 @@ f_lls = @(x) x'*XtX*x - ytX2*x + yty;
 ris = X\y;
 
 % Compute LBFGS
-[ouptut, k] = LBFGS(w, f_lls, X, grad_lls, 14, 1e-5);
+%{
+[output, k] = LBFGS(w, f_lls, X, grad_lls, 14, 1e-8, true);
+[output_bls, k_bls] = LBFGS(w, f_lls, X, grad_lls, 14, 1e-8, false);
+disp(norm(output-output_bls));
+disp(norm(X*output-y));
+disp(norm(X*output_bls-y));
+disp(norm(X*ris-y));
+%}
 
 % Compute LFBGS for different configurations
-l = [3, 5, 10];
-tol = [1e-2, 1e-4, 1e-6];
-lambda = [1e-2, 1e-3, 1e-4, 1e-5];
-run_configurations(l, tol, lambda, f_lls, grad_lls, w, dataset);
+l = [3, 5, 10, 16];
+lambda = [1, 1e-2, 1e-4, 1e-9];
+run_configurations(l, lambda, f_lls, grad_lls, y, w, dataset);
