@@ -8,7 +8,9 @@ Input:
     X: (matrix) mxn matrix
     grad: (function) gradient of the function
     l: (int) number of steps to keep in memory
-    tol: (float) tollerance on the error
+    tol: (float) tolerance on the error
+    Wolfe: (bool) if true performs an Armijo-Wolfe line search otherwise it
+    will perform a backtracking line search
 Output:
     x_next: (array) solution, or close to it, to the minimization problem
     k: (int) steps taken
