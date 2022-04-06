@@ -27,7 +27,7 @@ I = eye(size(X, 2));
 while(norm(grad_k)>tol && norm_y>tol)
     pk = -compute_direction(grad_k, s, y, I, k); % search direction
     if Wolfe
-        alpha = ArmijoWolfeLS(f, grad, @(alpha)xk + alpha.*pk, 1e-4, 0.9, 0.5, 1, pk);
+        alpha = ArmijoWolf(f, grad, pk, xk);
     else
         alpha = BLS(f, grad, @(alpha)xk + alpha.*pk, 1e-4, 0.5, 1);
     end

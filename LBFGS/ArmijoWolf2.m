@@ -8,7 +8,7 @@ while i < max_iter
     phiz = f(xk);
     if (phia > phiz+c1*ai*f1(xk) || (i>1 && phia >= aold))
         a=zoom(aold,ai);
-        brea;
+        break;
     end
     phia1 = f1(phia);
     if abs(phia1) <= -c2*f1(xk)
