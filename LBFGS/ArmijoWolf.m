@@ -1,4 +1,4 @@
-function a = ArmijoWolf(f,f1,pk,xk)
+function a = ArmijoWolfe(f,f1,pk,xk)
 max_f_eval=1000;
 m1=0.01;
 m2=0.9;
