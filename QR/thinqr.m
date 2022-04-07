@@ -15,10 +15,12 @@ end
 function Q = compute_Q(U, m, n)
 u = cell2mat(U(end));
 mu = length(u);
-Q=eye(m);
+Q = eye(m,n);
 
-Q(end-mu+1:end, end-mu+1:end)= Q(end-mu+1:end, end-mu+1:end)- 2* (u*u');
-Q = Q(:, 1:n);
+H=2* (u*u');
+
+Q(end-mu+1:end, end)= Q(end-mu+1:end, end)- H(:,1);
+%Q = Q(:, 1:n);
 [~,l] = size(U);
 
 for i = l-1: -1: 1
