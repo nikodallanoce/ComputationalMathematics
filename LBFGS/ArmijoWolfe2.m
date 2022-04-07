@@ -1,4 +1,4 @@
-function a = ArmijoWolf2(xk,pk,f,f1,c1,c2,ai,amax)
+function a = ArmijoWolfe2(xk,pk,f,f1,c1,c2,ai,amax)
 i=1;
 max_iter = 1000;
 aold = 0;
