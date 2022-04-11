@@ -17,10 +17,9 @@ u = cell2mat(U(end));
 mu = length(u);
 Q = eye(m,n);
 
-H=2* (u*u');
+H=2*u*u(1);
 
-Q(end-mu+1:end, end)= Q(end-mu+1:end, end)- H(:,1);
-%Q = Q(:, 1:n);
+Q(end-mu+1:end, end)= Q(end-mu+1:end, end)- H;
 [~,l] = size(U);
 
 for i = l-1: -1: 1
