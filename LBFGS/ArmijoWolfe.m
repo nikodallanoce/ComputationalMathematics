@@ -39,7 +39,7 @@ min_a = 1e-16;
 
 as = a_start;
 ls_iter = 1;
-while ls_iter < max_f_eval
+while ls_iter < max_iter
     [phi_a, phi_0, phi_p0, phi_ps] = alpha_fun(as);
 
     % Armijo and strong Wolf condition.
@@ -49,18 +49,17 @@ while ls_iter < max_f_eval
     if phi_ps >= 0
         break;
     end
-    as = as/tau;       % we increase the value of as.
+    as = as/tau;        % we increase the value of as.
     ls_iter=ls_iter+1;  
 end
 am = 0;
 a = as;
 phi_pm = phi_p0;
-ls_iter=1;             %re-initializzation of the iteration count.
-while ls_iter <= max_f_eval && as - am > min_a && phi_ps > 1e-12
-    
+ls_iter=1;              %re-initializzation of the iteration count.
+while ls_iter <= max_iter && as - am > min_a && phi_ps > 1e-12
     % compute the new value by safeguarded quadratic interpolation
     a = (am * phi_ps - as * phi_pm) / (phi_ps - phi_pm);
-    a = max_iter(am + (as - am) * sfgrd, min(as - (as - am) * sfgrd, a));
+    a = max(am + (as - am) * sfgrd, min(as - (as - am) * sfgrd, a));
 
     [phi_a,phi_0,phi_p0,phi_p] = alpha_fun(a);
     if all(phi_a <= phi_0 + m1 * a * phi_p0) && all(abs(phi_p) <= -m2 * phi_p0)
