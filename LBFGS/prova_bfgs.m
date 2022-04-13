@@ -46,6 +46,6 @@ disp(norm(X*output_bls-y)/norm(y));
 %}
 
 % Compute LFBGS for different configurations
-l = [3, 5, 10, 16];
+l = [5, 10, 15, 20];
 lambda = [1, 1e-2, 1e-4, 1e-9];
 run_configurations_lbfgs(10, l, lambda, 1e-8, dataset, y, true);
