@@ -4,7 +4,8 @@ clear;
 % Build the X matrix from the dataset
 dataset = readtable("../datasets/ML-CUP21-TR.csv");
 dataset = table2array(dataset);
-X = dataset(:, 2:end);
+dataset = dataset(:, 2:end);
+X = dataset;
 
 % Build \hat_{X} and \hat_{y}
 [m, n0] = size(X);
@@ -13,6 +14,7 @@ X = [X'; lambda.*eye(m)];
 [m, n] = size(X);
 y = [randn(n0, 1); zeros(m-n0, 1)];
 
+%{
 w = randn(n, 1);
 
 % Build the function and its gradient
@@ -34,7 +36,16 @@ ris = X\y;
 fprintf("norm_res_bls= %.8e | norm_res_wolfe=%.8e | norm_res_matl=%.8e\n \n", norm(X*output_bls-y), norm(X*output-y), norm(X*ris-y))
 fprintf("diff: %.8e\n \n", norm(output-output_bls));
 fprintf("rel_err -> BLS: %.15e | Wolfe: %.15e \n \n", norm(output_bls-ris)/norm(ris), norm(output-ris)/norm(ris))
+%}
+%{
+[output, k, residuals, errors] = LBFGS(w, f_lls, X, grad_lls, 14, 1e-8, true, y);
+[output_bls, k_bls, residuals_bls, errors_bls] = LBFGS(w, f_lls, X, grad_lls, 14, 1e-8, false, y);
+disp(norm(output-output_bls));
+disp(norm(X*output-y)/norm(y));
+disp(norm(X*output_bls-y)/norm(y));
+%}
+
 % Compute LFBGS for different configurations
 l = [3, 5, 10, 16];
 lambda = [1, 1e-2, 1e-4, 1e-9];
-% run_configurations(l, lambda, f_lls, grad_lls, y, w, dataset);
+run_configurations_lbfgs(10, l, lambda, 1e-8, dataset, y, true);
