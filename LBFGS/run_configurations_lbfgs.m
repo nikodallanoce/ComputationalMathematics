@@ -1,4 +1,4 @@
-function run_configurations_lbfgs(runs, l, lambda, tol, D, y)
+function run_configurations_lbfgs(runs, l, lambda, tol, D, y, Wolfe)
 tot_runs = length(lambda)*length(l);
 residues = zeros(tot_runs,1);
 errors = zeros(tot_runs,1);
@@ -8,7 +8,7 @@ config = strings(tot_runs, 1);
 ind = 1;
 [m0, ~] = size(D);
 % Compute LBFGS
-X = [D'; 1.*eye(m0)];
+X = [D'; eye(m0)];
 [~, n] = size(X);
 for r=1: runs
     fprintf("Run %d \n \n", r);
@@ -24,19 +24,16 @@ for r=1: runs
             yty = y'*y;
             grad_lls = @(x) 2.*x'*XtX - ytX2;
             f_lls = @(x) x'*XtX*x - ytX2*x + yty;
-
-            w_exact = X\y;
+            
             tic;
-            [w_our, k] = LBFGS(w, f_lls, X, grad_lls, curr_l, tol, false);
+            [w_our, k, residue, error] = LBFGS(w, f_lls, X, grad_lls, curr_l, tol, Wolfe, y);
             elapsed = toc;
-            residue = norm(X*w_our-y);
-            error = norm(w_our - w_exact)/norm(w_exact);
-            fprintf("Config: l= %d, lambda= %.1e, resid= %e, error= %.6e, iter= %d, time= %.2f\n", curr_l, curr_lambda, residue, error, k, elapsed)
-            residues(ind) = residues(ind) + residue;
-            errors(ind) = errors(ind) + error;
+            fprintf("Config: l= %d, lambda= %.1e, resid= %e, error= %.6e, iter= %d, time= %.2f\n", curr_l, curr_lambda, residue(end), error(end), k, elapsed)
+            residues(ind) = residues(ind) + residue(end);
+            errors(ind) = errors(ind) + error(end);
             times(ind) = times(ind) + elapsed;
             iters(ind) = iters(ind) + k;
-            config(ind) = sprintf("%d %.2e",curr_l, curr_lambda);
+            config(ind) = sprintf("%d %.2e", curr_l, curr_lambda);
             ind = ind +1;
         end
     end
