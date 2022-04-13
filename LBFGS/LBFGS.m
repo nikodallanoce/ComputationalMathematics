@@ -1,4 +1,4 @@
-function [x_next, k] = LBFGS(x0, f, X, grad, l, tol, Wolfe)
+function [x_next, k, residuals, errors] = LBFGS(x0, f, X, grad, l, tol, Wolfe, y_hat)
 %{
 LBFGS computes the solution to the linear least squares problem following
 algorithm 7.4 by Jorge Nocedal and Stephen J Wright. Numerical optimization.
@@ -11,9 +11,12 @@ Input:
     tol: (float) tolerance on the error
     Wolfe: (bool) if true performs an Armijo-Wolfe line search otherwise it
     will perform a backtracking line search
+    y_hat: (array) ground truth
 Output:
     x_next: (array) solution, or close to it, to the minimization problem
     k: (int) steps taken
+    residuals: (array) residuals at each step, ||X*xk-y_hat||
+    errors: (array) errors at each step, residual/||y_hat||
 %}
 
 xk=x0;
@@ -24,6 +27,8 @@ y = [];
 x_next=zeros(length(xk));
 norm_y= 9999;
 I = eye(size(X, 2));
+residuals = norm(X*xk-y_hat);
+errors = residuals(end)/norm(y_hat);
 while(norm(grad_k)>tol && norm_y>tol && k<=1000)
     pk = -compute_direction(grad_k, s, y, I, k); % search direction
     if Wolfe
@@ -45,6 +50,10 @@ while(norm(grad_k)>tol && norm_y>tol && k<=1000)
 
     % if the last gradient didn't have a great change from the previous one
     norm_y = norm(y(end));
+
+    % residuals and relative error
+    residuals = [residuals norm(X*xk-y_hat)];
+    errors = [errors residuals(end)/norm(y_hat)];
 end
 end
 

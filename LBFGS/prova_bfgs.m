@@ -28,12 +28,11 @@ ris = X\y;
 
 % Compute LBFGS
 
-[output, k] = LBFGS(w, f_lls, X, grad_lls, 14, 1e-8, true);
-[output_bls, k_bls] = LBFGS(w, f_lls, X, grad_lls, 14, 1e-8, false);
+[output, k, residuals, errors] = LBFGS(w, f_lls, X, grad_lls, 14, 1e-8, true, y);
+[output_bls, k_bls, residuals_bls, errors_bls] = LBFGS(w, f_lls, X, grad_lls, 14, 1e-8, false, y);
 disp(norm(output-output_bls));
-disp(norm(X*output-y));
-disp(norm(X*output_bls-y));
-disp(norm(X*ris-y));
+disp(norm(X*output-y)/norm(y));
+disp(norm(X*output_bls-y)/norm(y));
 
 % Compute LFBGS for different configurations
 l = [3, 5, 10, 16];
