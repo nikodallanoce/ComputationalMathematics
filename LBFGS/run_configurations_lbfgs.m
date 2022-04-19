@@ -1,11 +1,10 @@
-function run_configurations_lbfgs(runs, l, lambda, tol, D, y, Wolfe)
+function [residues, errors, times, iters, config] = run_configurations_lbfgs(runs, l, lambda, tol, D, y, Wolfe)
 tot_runs = length(lambda)*length(l);
-residues = zeros(tot_runs,1);
-errors = zeros(tot_runs,1);
-times = zeros(tot_runs,1);
-iters = zeros(tot_runs, 1);
-config = strings(tot_runs, 1);
-ind = 1;
+residues = zeros(tot_runs, runs);
+errors = zeros(tot_runs, runs);
+times = zeros(tot_runs, runs);
+iters = zeros(tot_runs, runs);
+config = strings(tot_runs,1);
 [m0, ~] = size(D);
 % Compute LBFGS
 X = [D'; eye(m0)];
@@ -13,6 +12,7 @@ X = [D'; eye(m0)];
 for r=1: runs
     fprintf("Run %d \n \n", r);
     w = randn(n, 1);
+    ind = 1;
     for i=1:length(l)
         curr_l=l(i);
         for j=1:length(lambda)
@@ -26,22 +26,21 @@ for r=1: runs
             f_lls = @(x) x'*XtX*x - ytX2*x + yty;
             
             tic;
-            [w_our, k, residue, error] = LBFGS(w, f_lls, X, grad_lls, curr_l, tol, Wolfe, y);
+            [~, k, residue, error] = LBFGS(w, f_lls, X, grad_lls, curr_l, tol, Wolfe, y);
             elapsed = toc;
             fprintf("Config: l= %d, lambda= %.1e, resid= %e, error= %.6e, iter= %d, time= %.2f\n", curr_l, curr_lambda, residue(end), error(end), k, elapsed)
-            residues(ind) = residues(ind) + residue(end);
-            errors(ind) = errors(ind) + error(end);
-            times(ind) = times(ind) + elapsed;
-            iters(ind) = iters(ind) + k;
-            config(ind) = sprintf("%d %.2e", curr_l, curr_lambda);
-            ind = ind +1;
+            residues(ind, r) = residue(end);
+            errors(ind,r) = error(end);
+            times(ind,r) = elapsed;
+            iters(ind,r) = k;
+            config(ind) = sprintf("L: %d, lam: %.2e", curr_l, curr_lambda);
+            ind = ind + 1;
         end
     end
-    ind = 1;
 end
-residues = residues./runs;
-errors = errors./runs;
-times = times./runs;
-iters = iters./runs;
-disp(["l , lambda", "residues","" ,"errors", "iters", "times"]);
-disp([config, residues, errors, iters, times]);
+%residues = residues./runs;
+%errors = errors./runs;
+%times = times./runs;
+%iters = iters./runs;
+%disp(["l , lambda", "residues","" ,"errors", "iters", "times"]);
+%disp([config, residues, errors, iters, times]);
