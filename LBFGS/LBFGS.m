@@ -29,7 +29,7 @@ norm_y= 9999;
 I = eye(size(X, 2));
 residuals = norm(X*xk-y_hat);
 errors = residuals(end)/norm(y_hat);
-while(norm(grad_k)>tol && norm_y>tol && k<=1000)
+while(norm_y>tol && norm(grad_k)>tol && k<=1000)
     pk = -compute_direction(grad_k, s, y, I, k); % search direction
     if Wolfe
         alpha = ArmijoWolfe(f, grad, pk, xk);
