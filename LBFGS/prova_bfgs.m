@@ -18,7 +18,7 @@ y = [randn(n0, 1); zeros(m-n0, 1)];
 l = [5, 10, 15, 20];
 lambda = [1, 1e-2, 1e-4, 1e-8];
 runs = 10;
-[residues, errors, times, iters, config] = run_configurations_lbfgs(runs, l, lambda, 1e-8, dataset, y, true);
+[residues, errors, times, iters, config] = run_configurations_lbfgs(runs, l, lambda, 1e-8, dataset, y, false);
 
 [r, ~] = size(residues);
 stats = strings(r, 5);
