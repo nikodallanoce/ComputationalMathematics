@@ -14,9 +14,10 @@ X = [X'; lambda.*eye(m0)];
 [m, n] = size(X);
 y = [randn(n0, 1); zeros(m-n0, 1)];
 
-Wolfe = true;
+Wolfe = false;
 w = randn(n, 1);
 lambdas = [1, 1e-2, 1e-4, 1e-8];
+%lambdas = [1e-8];
 L = [5, 10, 15, 20];
 
 for l=L
@@ -31,14 +32,15 @@ for l=L
         yty = y'*y;
         grad_lls = @(x) 2.*x'*XtX - ytX2;
         f_lls = @(x) x'*XtX*x - ytX2*x + yty;
-    
-        [~, k, residues, errors] = LBFGS(w, f_lls, X, grad_lls, l, 1e-8, Wolfe, y);
+
+        x_star = X\y;
+        [~, k, residues, errors] = LBFGS(w, f_lls, X, grad_lls, l, 1e-8, Wolfe, y, x_star);
         res(1:k+1,i)=residues;
         err(1:k+1,i)=errors;
     end
-    save_s=sprintf("results/conf_lambda_l_%d_res_wolfe.csv", l);
+    save_s=sprintf("results2/conf_lambda_l_%d_res.csv", l);
     csvwrite(save_s, res);
-    save_s=sprintf("results/conf_lambda_l_%d_err_wolfe.csv", l);
+    save_s=sprintf("results2/conf_lambda_l_%d_err.csv", l);
     csvwrite(save_s, err);
 end
 
