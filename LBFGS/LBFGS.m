@@ -1,4 +1,4 @@
-function [x_next, k, residuals, errors] = LBFGS(x0, f, X, grad, l, tol, Wolfe, y_hat)
+function [x_next, k, residuals, errors] = LBFGS(x0, f, X, grad, l, tol, Wolfe, y_hat, x_star)
 %{
 LBFGS computes the solution to the linear least squares problem following
 algorithm 7.4 by Jorge Nocedal and Stephen J Wright. Numerical optimization.
@@ -27,9 +27,12 @@ y = [];
 x_next=zeros(length(xk));
 norm_y= 9999;
 I = eye(size(X, 2));
-residuals = norm(X*xk-y_hat);
-errors = residuals(end)/norm(y_hat);
-while(norm_y>tol && norm(grad_k)>tol && k<=1000)
+%residuals = norm(X*xk-y_hat);
+errors = norm(x_star - xk)/ norm(x_star);
+residuals = norm(X*xk-y_hat)/norm(y_hat);
+patience = 5;
+pat_tol = 1e-4;
+while(norm_y>tol && patience>0 && norm(grad_k)>tol && k<=1000)
     pk = -compute_direction(grad_k, s, y, I, k); % search direction
     if Wolfe
         alpha = ArmijoWolfe(f, grad, pk, xk);
@@ -46,14 +49,26 @@ while(norm_y>tol && norm(grad_k)>tol && k<=1000)
     % update the parameters
     grad_k=grad_next;
     xk=x_next;
+    if k==40
+        disp("");
+    end
     k=k+1;
 
     % if the last gradient didn't have a great change from the previous one
     norm_y = norm(y(end));
+    if norm_y < pat_tol
+        patience=patience-1;
+        if patience==0
+            disp("Ho perso la pazienza");
+        end
+    else
+        patience = 5;
+    end
 
     % residuals and relative error
-    residuals = [residuals norm(X*xk-y_hat)];
-    errors = [errors residuals(end)/norm(y_hat)];
+    %residuals = [residuals norm(X*xk-y_hat)];
+    errors = [errors norm(X*xk-X*x_star)/ norm(X*x_star)];
+    residuals = [residuals norm(X*xk-y_hat)/norm(y_hat)];
 end
 end
 
