@@ -24,9 +24,10 @@ for r=1: runs
             yty = y'*y;
             grad_lls = @(x) 2.*x'*XtX - ytX2;
             f_lls = @(x) x'*XtX*x - ytX2*x + yty;
+            x_star = X\y;
             
             tic;
-            [~, k, residue, error] = LBFGS(w, f_lls, X, grad_lls, curr_l, tol, Wolfe, y);
+            [~, k, residue, error] = LBFGS(w, f_lls, X, grad_lls, curr_l, tol, Wolfe, y, x_star);
             elapsed = toc;
             fprintf("Config: l= %d, lambda= %.1e, resid= %e, error= %.6e, iter= %d, time= %.2f\n", curr_l, curr_lambda, residue(end), error(end), k, elapsed)
             residues(ind, r) = residue(end);
