@@ -47,7 +47,7 @@ def get_l_from_filename(filename):
     return filename.split("_")[3]
 
 
-folder_path = "../results/"
+folder_path = "results2/"
 filenames = os.listdir(folder_path)
 wolf_err_list = []
 wolf_res_list = []
@@ -67,7 +67,7 @@ for f in filenames:
             bls_res_list.append((get_l_from_filename(f), df))
 
 lambdas = [1, 1e-2, 1e-4, 1e-8]
-lamda_index = 2
+lamda_index = 3
 
 error_residual_plot("ArmijoWolfe", wolf_err_list, wolf_res_list, lamda_index=lamda_index)
 error_residual_plot("BLS", bls_err_list, bls_res_list, lamda_index=lamda_index)
