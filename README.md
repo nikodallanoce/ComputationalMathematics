@@ -14,3 +14,14 @@ with $X$ the (tall thin) matrix from the ML-cup dataset by prof. Micheli, and $y
 - (A2) is **thin QR factorization with Householder reflectors**, in the variant where one does not form the matrix Q, but stores the Householder vectors u_k and uses them to perform (implicitly) products with Q and Q^T.
 - (A3) is an algorithm of the class of **Conjugate Gradient methods**.
 - (A4) is a **standard momentum descent (heavy ball)** approach.
+## Repository structure
+```bash
+📂ComputationalMathematics
+├── 📂LBFGS  # Limited-memory quasi-Newton method
+│   └── 📄...
+├── 📂QR  # Thin QR factorization with Householder reflectors
+│   └── 📄...
+├── 📂datasets  # Datasets used by the project
+│   └── 📄...
+└── 📄README.md
+```
