@@ -28,6 +28,14 @@ f_lls = @(w) w'*XtX*w - ytX2*w + yty;
 [w_our, k, residue, error] = LBFGS(w, f_lls, X_hat, grad_lls, 5, 10e-14, false, y);
 
 % Compute LFBGS for different configurations
-%l = [5, 10, 15, 20];
-%lambda = [1, 1e-2, 1e-4, 1e-9];
-%run_configurations_lbfgs(10, l, lambda, 1e-8, dataset, y, false);
+[residues, errors, times, iters, config] = run_configurations_lbfgs(10, l, lambda, 1e-8, dataset, y, false);
+[r, ~] = size(residues);
+stats = strings(r, 5);
+for i=1 : r
+    row = {config(i),...
+           sprintf("res: %e +- %e", mean(residues(i,:)), std(residues(i,:))),...
+           sprintf("err: %e +- %e", mean(errors(i,:)), std(errors(i,:))),...
+           sprintf("time: %e +- %e", mean(times(i,:)), std(times(i,:))),...
+           sprintf("it: %e +- %e", mean(iters(i,:)), std(iters(i,:)))};
+    stats(i,:) = row;
+end
