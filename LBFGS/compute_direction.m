@@ -18,7 +18,6 @@ q = gradient;
 [~, nc] = size(s);
 alpha = zeros(nc);
 rho = zeros(nc);
-
 for i = nc:-1:1
     rho(i) = 1/(y(:, i)'*s(:, i));
     alpha(i) = rho(i).* s(:, i)' * q;
