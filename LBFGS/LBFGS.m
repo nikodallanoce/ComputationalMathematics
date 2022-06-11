@@ -67,7 +67,7 @@ while(norm_y>tol && patience>0 && norm(grad_k)>tol && k<=1000)
 
     % residuals and relative error
     %residuals = [residuals norm(X*xk-y_hat)];
-    errors = [errors norm(X*xk-X*x_star)/ norm(X*x_star)];
+    errors = [errors norm(X*xk-X*x_star)/ norm(x_star)];
     residuals = [residuals norm(X*xk-y_hat)/norm(y_hat)];
 end
 end
