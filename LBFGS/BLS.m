@@ -1,8 +1,7 @@
-function a = BLS(f, grad, alpha, m1, tau, a)
-al = alpha(0);
-phi_zero = f(al);
-grad_zero = grad(al);
-while(f(alpha(a))> phi_zero + m1*a*grad_zero)
-    a=a*tau;
+function alpha = BLS(f, grad, xk, p, c1, tau, alpha)
+f_xk = f(xk);
+grad_xk = grad(xk);
+while(f(xk + alpha * p) > f_xk + c1 * alpha * grad_xk * p)
+    alpha = alpha * tau;
 end
 end
