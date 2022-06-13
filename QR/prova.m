@@ -10,7 +10,7 @@ X = dataset(:, 2:end);
 
 % Build \hat_{X} and \hat_{y}
 [m, n0] = size(X);
-lambda = 1e-8;
+lambda = 1e-4;
 X = [X'; lambda.*eye(m)];
 [m, n] = size(X);
 y = [randn(n0, 1); zeros(m-n0, 1)];
