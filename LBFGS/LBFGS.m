@@ -37,7 +37,7 @@ while(norm_y>tol && patience>0 && norm(grad_k)>tol && k<=1000)
     if Wolfe
         alpha = ArmijoWolfe(f, grad, pk, xk);
     else
-        alpha = BLS(f, grad, @(alpha)xk + alpha.*pk, 1e-4, 0.5, 1);
+        alpha = BLS(f, grad, xk, pk, 1e-4, 0.5, 1);
     end
     x_next = xk + alpha.*pk;
     grad_next = grad(x_next)';
