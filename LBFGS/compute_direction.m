@@ -1,4 +1,4 @@
-function r = compute_direction(gradient, s, y, I, k)
+function r = compute_direction(gradient, s, y, H0, k)
 %{
 Computes the search direction, p, for the current iteration of the LBFGS
 method.
@@ -16,6 +16,9 @@ Output:
 
 q = gradient;
 [~, nc] = size(s);
+if k <= nc
+    nc = k-1;
+end
 alpha = zeros(nc);
 rho = zeros(nc);
 for i = nc:-1:1
@@ -25,11 +28,11 @@ for i = nc:-1:1
 end
 
 gamma = 1;
-if(k>0)
+if k > 1
     gamma = s(:, nc)'*y(:, nc) / norm(y(:, nc))^2;
 end
 
-H0 = gamma * I;
+H0 = gamma * H0;
 r = H0 * q;
 
 for i = 1:nc
