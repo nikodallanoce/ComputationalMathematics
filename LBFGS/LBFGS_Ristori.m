@@ -8,11 +8,7 @@ H0 = eye(size(X, 2));
 residuals = norm(X*xk-y)/norm(y);
 errors = norm(xk-x_star);
 for k=1:1:1000
-    if k == 1
-        pk = -grad_k;
-    else
-        pk = -compute_direction(grad_k, s_mem, y_mem, H0, k); % search direction
-    end
+    pk = -compute_direction(grad_k, s_mem, y_mem, H0, k); % search direction
 
     % compute the step size by doing a line search
     if Wolfe
@@ -44,15 +40,18 @@ for k=1:1:1000
     grad_k = grad_next;
     xk = x_next;
 
-    % stop if the gradient or the displacement between gradients are
-    % smaller than the tolerance
-    if k <= l
-        norm_y = norm(y_mem(k));
-    else
-        norm_y = norm(y_mem(end));
-    end
-    if norm_y < tol || norm(grad_k) < tol
+    % stop if the gradient is smaller than the tolerance
+    if Wolfe && norm(grad_k) < tol
         break;
+    else
+        if k <= l
+            norm_y = norm(y_mem(k));
+        else
+            norm_y = norm(y_mem(end));
+        end
+        if norm_y < tol || norm(grad_k) < tol
+            break;
+        end
     end
 
     % print current state of L-BFGS
@@ -63,5 +62,8 @@ for k=1:1:1000
     % compute metrics
     residuals = [residuals norm(X*xk-y)/norm(y)];
     errors = [errors norm(xk-x_star)];
+end
+if verbose && mod(k, 5) ~= 0
+    fprintf('%5d %1.2e %1.2e\n', k, alpha, norm(grad_k));
 end
 end
