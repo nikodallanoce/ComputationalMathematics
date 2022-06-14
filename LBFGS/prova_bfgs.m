@@ -25,8 +25,7 @@ grad_lls = @(w) 2.*w'*XtX - ytX2;
 f_lls = @(w) w'*XtX*w - ytX2*w + yty;
 
 % Compute the solution using L-BFGS
-%[w_our, k, residue, error] = LBFGS(w, f_lls, X_hat, grad_lls, 10, 1e-12, true, y, matlab_w);
-[w_our, k, residuals, errors] = LBFGS_Ristori(w, f_lls, grad_lls, X_hat, y, 30, 1e-12, true, true, matlab_w);
+[w_our, k, residuals, errors] = LBFGS(w, f_lls, grad_lls, X_hat, y, 10, 1e-12, true, true, matlab_w);
 
 % Compute LFBGS for different configurations
 %{
