@@ -55,7 +55,7 @@ end
 am = 0;
 a = as;
 phi_pm = phi_p0;
-ls_iter=1;              %re-initializzation of the iteration count.
+ls_iter=1;              %re-initialization of the iteration count.
 while ls_iter <= max_iter && as - am > min_a && phi_ps > 1e-12
     % compute the new value by safeguarded quadratic interpolation
     a = (am * phi_ps - as * phi_pm) / (phi_ps - phi_pm);
