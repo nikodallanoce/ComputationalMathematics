@@ -8,7 +8,7 @@ X = dataset;
 
 % Build \hat{X} and \hat{y}
 [m, n0] = size(X);
-lambda = 1e-8;
+lambda = 1e-2;
 X_hat = [X'; lambda.*eye(m)];
 [m, n] = size(X_hat);
 y = [randn(n0, 1); zeros(m-n0, 1)]; % This is actually \hat{y}
@@ -25,8 +25,10 @@ grad_lls = @(w) 2.*w'*XtX - ytX2;
 f_lls = @(w) w'*XtX*w - ytX2*w + yty;
 
 % Compute the solution using L-BFGS
-[w_our, k, residuals, errors] = LBFGS(w, f_lls, grad_lls, X_hat, y, 10, 1e-12, true, true, matlab_w);
+[w_our, k, residuals, errors] = LBFGS(w, f_lls, grad_lls, X_hat, y, 30, 1e-14, true, true, matlab_w);
 
+rap_our = norm(X_hat*w_our-y)/norm(y);
+rap_mat = norm(X_hat*matlab_w-y)/norm(y);
 % Compute LFBGS for different configurations
 %{
 [residues, errors, times, iters, config] = run_configurations_lbfgs(10, l, lambda, 1e-8, dataset, y, false);
