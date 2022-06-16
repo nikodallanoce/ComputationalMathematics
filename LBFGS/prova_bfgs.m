@@ -26,6 +26,10 @@ f_lls = @(w) w'*XtX*w - ytX2*w + yty;
 
 % Compute the solution using L-BFGS
 [w_our, k, residuals, errors, p_errors] = LBFGS(w, f_lls, grad_lls, X_hat, y, 50, 1e-12, true, true, matlab_w);
+
+rap_our = norm(X_hat*w_our-y)/norm(y);
+rap_mat = norm(X_hat*matlab_w-y)/norm(y);
+
 p = zeros(1, k-1);
 for i=1:1:k-1
     if p_errors(i) == 0
