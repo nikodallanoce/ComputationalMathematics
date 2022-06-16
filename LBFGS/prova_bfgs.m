@@ -8,7 +8,7 @@ X = dataset;
 
 % Build \hat{X} and \hat{y}
 [m, n0] = size(X);
-lambda = 1e-8;
+lambda = 1e-4;
 X_hat = [X'; lambda.*eye(m)];
 [m, n] = size(X_hat);
 y = [randn(n0, 1); zeros(m-n0, 1)]; % This is actually \hat{y}
@@ -25,19 +25,11 @@ grad_lls = @(w) 2.*w'*XtX - ytX2;
 f_lls = @(w) w'*XtX*w - ytX2*w + yty;
 
 % Compute the solution using L-BFGS
-[w_our, k, residuals, errors] = LBFGS(w, f_lls, grad_lls, X_hat, y, 10, 1e-12, true, true, matlab_w);
-
-% Compute LFBGS for different configurations
-%{
-[residues, errors, times, iters, config] = run_configurations_lbfgs(10, l, lambda, 1e-8, dataset, y, false);
-[r, ~] = size(residues);
-stats = strings(r, 5);
-for i=1 : r
-    row = {config(i),...
-           sprintf("res: %e +- %e", mean(residues(i,:)), std(residues(i,:))),...
-           sprintf("err: %e +- %e", mean(errors(i,:)), std(errors(i,:))),...
-           sprintf("time: %e +- %e", mean(times(i,:)), std(times(i,:))),...
-           sprintf("it: %e +- %e", mean(iters(i,:)), std(iters(i,:)))};
-    stats(i,:) = row;
+[w_our, k, residuals, errors, p_errors] = LBFGS(w, f_lls, grad_lls, X_hat, y, 50, 1e-12, true, true, matlab_w);
+p = zeros(1, k-1);
+for i=1:1:k-1
+    if p_errors(i) == 0
+       p_errors(i) = 1e-16;
+    end
+    p(1, i) = log(p_errors(i+1))./log(p_errors(i));
 end
-%}
