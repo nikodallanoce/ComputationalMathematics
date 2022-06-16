@@ -10,7 +10,6 @@ errors = norm(xk-x_star);
 p_errors = abs(f(xk)-f(x_star));
 for k=1:1:1000
     pk = -compute_direction(grad_k, s_mem, y_mem, H0, k); % search direction
-
     % compute the step size by doing a line search
     if Wolfe
         alpha = ArmijoWolfe(f, grad, pk, xk);
