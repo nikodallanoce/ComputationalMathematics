@@ -41,6 +41,16 @@ for k=1:1:1000
     grad_k = grad_next;
     xk = x_next;
 
+    % print current state of L-BFGS
+    if verbose && (mod(k, 5) == 0 || k == 1)
+         fprintf('%5d %1.2e %1.2e\n', k, alpha, norm(grad_k));
+    end
+
+    % compute metrics
+    residuals = [residuals norm(X*xk-y)/norm(y)];
+    errors = [errors norm(xk-x_star)];
+    p_errors = [p_errors abs(f(xk)-f(x_star))];
+
     % stop if the gradient is smaller than the tolerance
     if Wolfe && norm(grad_k) < tol
         break;
@@ -54,16 +64,6 @@ for k=1:1:1000
             break;
         end
     end
-
-    % print current state of L-BFGS
-    if verbose && (mod(k, 5) == 0 || k == 1)
-         fprintf('%5d %1.2e %1.2e\n', k, alpha, norm(grad_k));
-    end
-
-    % compute metrics
-    residuals = [residuals norm(X*xk-y)/norm(y)];
-    errors = [errors norm(xk-x_star)];
-    p_errors = [p_errors abs(f(xk)-f(x_star))];
 end
 if verbose && mod(k, 5) ~= 0
     fprintf('%5d %1.2e %1.2e\n', k, alpha, norm(grad_k));
