@@ -7,7 +7,7 @@ x_next = zeros(length(xk));
 H0 = eye(size(X, 2));
 residuals = norm(X*xk-y)/norm(y);
 errors = norm(xk-x_star);
-for k=1:1:1000
+for k=1:1:2000
     pk = -compute_direction(grad_k, s_mem, y_mem, H0, k); % search direction
     % compute the step size by doing a line search
     if Wolfe
