@@ -1,4 +1,4 @@
-function [x_next, k, residuals, errors] = LBFGS(x0, f, grad, X, y, l, tol, Wolfe, verbose, x_star)
+function [x_next, k, residuals, errors, p_errors] = LBFGS(x0, f, grad, X, y, l, tol, Wolfe, verbose, x_star)
 xk = x0; % current point
 grad_k = grad(x0)'; % gradient at the current point
 s_mem = zeros(length(xk), l); % displacements between next and current points
@@ -7,7 +7,8 @@ x_next = zeros(length(xk));
 H0 = eye(size(X, 2));
 residuals = norm(X*xk-y)/norm(y);
 errors = norm(xk-x_star);
-for k=1:1:2000
+p_errors = abs(f(xk)-f(x_star));
+for k=1:1:1000
     pk = -compute_direction(grad_k, s_mem, y_mem, H0, k); % search direction
     % compute the step size by doing a line search
     if Wolfe
@@ -47,6 +48,7 @@ for k=1:1:2000
     % compute metrics
     residuals = [residuals norm(X*xk-y)/norm(y)];
     errors = [errors norm(xk-x_star)];
+    p_errors = [p_errors abs(f(xk)-f(x_star))];
 
     % stop if the gradient is smaller than the tolerance
     if Wolfe && norm(grad_k) < tol
