@@ -17,11 +17,17 @@ with $X$ the (tall thin) matrix from the ML-cup dataset by prof. Micheli, and $y
 ## Repository structure
 ```bash
 📂ComputationalMathematics
-├── 📂LBFGS  # Limited-memory quasi-Newton method
+├── 📂1_LBFGS  # Limited-memory quasi-Newton method
 │   └── 📄...
-├── 📂QR  # Thin QR factorization with Householder reflectors
+├── 📂2_QR  # Thin QR factorization with Householder reflectors
+│   └── 📄...
+├── 📂3_CG  # Conjugate gradient method
+│   └── 📄...
+├── 📂4_SMD  # Standard momentum descent (heavy ball)
 │   └── 📄...
 ├── 📂datasets  # Datasets used by the project
+│   └── 📄...
+├── 📂utilities  # Methods for building the matrices, functions and gradients
 │   └── 📄...
 └── 📄README.md
 ```
