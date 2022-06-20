@@ -16,6 +16,8 @@ for i=1:1:k-1
     p(1, i) = log(p_errors(i+1))./log(p_errors(i));
 end
 
-save('X_hat.mat', 'X_hat')
-save('y_hat.mat', 'y_hat')
-save('w.mat', 'w')
+%save('X_hat.mat', 'X_hat')
+%save('y_hat.mat', 'y_hat')
+%save('w.mat', 'w')
+
+plot(linspace(1, length(errors), length(errors)), errors)
