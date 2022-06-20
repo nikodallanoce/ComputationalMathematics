@@ -32,7 +32,7 @@ for i=1:length(lambdas)
         %[Q_t, R_t] = qr(A, "econ");
         %x_t= linsolve(R_t, Q_t'*y);
         x_t = X_hat\y;
-        err(i,j) = norm(x - x_t);
+        err(i,j) = norm(x - x_t)/norm(x_t);
         %disp(norm(x - x_t));
         %disp(norm(A*x - y)/norm(y));
         res(i,j) = norm(X_hat*x - y)/norm(y);
