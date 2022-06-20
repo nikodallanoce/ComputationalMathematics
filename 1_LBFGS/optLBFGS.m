@@ -1,4 +1,4 @@
-function [x1,f1,k] = optLBFGS(myFx,myGx, x0,maxIter,m)
+function [x1,f1,k, errors] = optLBFGS(myFx,myGx, x0,maxIter,m, w_star, gradToler)
 % Function optLBFGS performs multivariate local optimization using the L-BFGS method.
 % Input
 %   myFx:   the optimized function handle
@@ -18,26 +18,26 @@ function [x1,f1,k] = optLBFGS(myFx,myGx, x0,maxIter,m)
 % Author:
 %   Guipeng Li @THU ,  guipenglee@gmail.com
 
-gradToler = 1e-10; % tolerance for the norm of the slope
-XToler = 1e-10;    % tolerance for the variables' refinement
+%gradToler = 1e-12; % tolerance for the norm of the slope
+XToler = 1e-12;    % tolerance for the variables' refinement
 %MaxIter = 1000;
 k = 0;
 %m =10;
 n = length(x0);
 Sm = zeros(n,m);
 Ym = zeros(n,m);
-
+errors = norm(x0-w_star);
     f0 = feval(myFx,x0);
     g0 = feval(myGx,x0)';
     % line search
     % usually line search method only return step size alpha
     % we return 3 variables to save caculation time.
-    % [alpha,f1,g1] = strongwolfe(myFx,myGx,-g0,x0,f0,g0);
-    alpha = ArmijoWolfe(myFx,myGx,-g0,x0);
+    [alpha,f1,g1] = strongwolfe(myFx,myGx,-g0,x0,f0,g0);
+    %alpha = ArmijoWolfe(myFx,myGx,-g0,x0);
     % alpha = BLS(myFx, myGx, x0, -g0, 1e-4, 0.5, 1);
     x1 = x0 - alpha*g0;
-    f1 = myFx(x1);
-    g1 = myGx(x1)';
+    %f1 = myFx(x1);
+    %g1 = myGx(x1)';
     %[f1,g1]=feval(myFx,x0-alpha*g0);
     
     fprintf('%5s %15s %15s %15s\n', 'iter','step','fval','norm(g)');
@@ -72,14 +72,15 @@ Ym = zeros(n,m);
       end  
 
       % line search
-      % [alpha ,fs,gs]= strongwolfe(myFx,myGx,p,x1,f1,g1);
-      alpha = ArmijoWolfe(myFx,myGx,p,x1);
+      [alpha ,fs,gs]= strongwolfe(myFx,myGx,p,x1,f1,g1);
+      % alpha = ArmijoWolfe(myFx,myGx,p,x1);
       % alpha = BLS(myFx, myGx, x1, p, 1e-4, 0.5, 1);
       x0 = x1;
       g0 = g1;
       x1 = x1 + alpha*p;
-      fs = myFx(x1);
-      gs = myGx(x1)';
+      errors = [errors norm(x1-w_star)];
+      %fs = myFx(x1);
+      %gs = myGx(x1)';
       f1 = fs;
       g1 = gs;
       % save caculation
