@@ -5,8 +5,7 @@ addpath ../utilities;
 [f_lls, grad_lls] = build_lls(X_hat, y_hat);
 rmpath ../utilities;
 
-% Compute the solution using conjugate 
-
+% Compute the solution using conjugate gradient
 A = X_hat' * X_hat;
 b = X_hat' * y_hat;
 x0 = randn(length(A),1);
