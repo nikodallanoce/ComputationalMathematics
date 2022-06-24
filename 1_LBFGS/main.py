@@ -85,15 +85,15 @@ if __name__ == '__main__':
         q_values = []
         F = lambda x: f_lls(x, (XtX, ytX2, yty))
         for i in range(2, len(list_xk) -1):
-            xk = F(list_xk[i])
-            xk_prev = F(list_xk[i-1])
-            xk_prev2 = F(list_xk[i-2])
-            xk_succ = F(list_xk[i + 1])
+            xk = list_xk[i]
+            xk_prev = list_xk[i-1]
+            xk_prev2 = list_xk[i-2]
+            xk_succ = list_xk[i + 1]
             error[i+1] = np.linalg.norm(list_xk[i+1] - w_star)
             error[i] = np.linalg.norm(list_xk[i] - w_star)
             error[i-1] = np.linalg.norm(list_xk[i-1] - w_star)
             error[i-2] = np.linalg.norm(list_xk[i-2] - w_star)
-            q = np.log((xk_succ-xk)/(xk-xk_prev))/np.log((xk-xk_prev)/(xk_prev-xk_prev2))
+            q = np.log(np.linalg.norm(xk_succ-xk)/np.linalg.norm(xk-xk_prev))/np.log(np.linalg.norm(xk-xk_prev)/np.linalg.norm(xk_prev-xk_prev2))
             q_values.append(q)
 
 
