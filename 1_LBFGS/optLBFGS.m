@@ -1,4 +1,4 @@
-function [x1,f1,k, errors] = optLBFGS(myFx,myGx, x0,maxIter,m, w_star, gradToler)
+function [x1,f1,k] = optLBFGS(myFx,gradFx, x0,maxIter,m)
 % Function optLBFGS performs multivariate local optimization using the L-BFGS method.
 % Input
 %   myFx:   the optimized function handle
@@ -18,31 +18,29 @@ function [x1,f1,k, errors] = optLBFGS(myFx,myGx, x0,maxIter,m, w_star, gradToler
 % Author:
 %   Guipeng Li @THU ,  guipenglee@gmail.com
 
-%gradToler = 1e-12; % tolerance for the norm of the slope
-XToler = 1e-12;    % tolerance for the variables' refinement
+gradToler = 1e-10; % tolerance for the norm of the slope
+XToler = 1e-10;    % tolerance for the variables' refinement
 %MaxIter = 1000;
 k = 0;
 %m =10;
 n = length(x0);
 Sm = zeros(n,m);
 Ym = zeros(n,m);
-errors = norm(x0-w_star);
-    f0 = feval(myFx,x0);
-    g0 = feval(myGx,x0)';
+
+    f0=myFx(x0);
+    g0=gradFx(x0)';
     % line search
     % usually line search method only return step size alpha
     % we return 3 variables to save caculation time.
-    [alpha,f1,g1] = strongwolfe(myFx,myGx,-g0,x0,f0,g0);
-    %alpha = ArmijoWolfe(myFx,myGx,-g0,x0);
-    % alpha = BLS(myFx, myGx, x0, -g0, 1e-4, 0.5, 1);
-    x1 = x0 - alpha*g0;
-    %f1 = myFx(x1);
-    %g1 = myGx(x1)';
+    [alpha,f1,g1] = strongwolfe(myFx,gradFx,-g0,x0,f0,g0);
     %[f1,g1]=feval(myFx,x0-alpha*g0);
-    
+    x1 = x0 - alpha*g0;
     fprintf('%5s %15s %15s %15s\n', 'iter','step','fval','norm(g)');
     k =1;
     while true
+      if k==27
+        disp("");
+      end
       if k > maxIter
         break;
       end
@@ -72,15 +70,10 @@ errors = norm(x0-w_star);
       end  
 
       % line search
-      [alpha ,fs,gs]= strongwolfe(myFx,myGx,p,x1,f1,g1);
-      % alpha = ArmijoWolfe(myFx,myGx,p,x1);
-      % alpha = BLS(myFx, myGx, x1, p, 1e-4, 0.5, 1);
+      [alpha,fs,gs]= strongwolfe(myFx,gradFx,p,x1,f1,g1);
       x0 = x1;
       g0 = g1;
       x1 = x1 + alpha*p;
-      errors = [errors norm(x1-w_star)];
-      %fs = myFx(x1);
-      %gs = myGx(x1)';
       f1 = fs;
       g1 = gs;
       % save caculation
@@ -92,7 +85,7 @@ errors = norm(x0-w_star);
 end% end of optLBFGS
 
 %%%%%%%%%%%%%%%%%
-function [alphas,fs,gs] = strongwolfe(myFx,myGx,d,x0,fx0,gx0)
+function [alphas,fs,gs] = strongwolfe(myFx,gradFx, d,x0,fx0,gx0)
 % Function strongwolfe performs Line search satisfying strong Wolfe conditions
 % Input
 %   myFx:   the optimized function handle
@@ -130,13 +123,13 @@ i=1;
 % alphas is what we want.
     while true
       xx = x0 + alphax*d;
-      fxx = feval(myFx,xx);
-      gxx = feval(myGx,xx)';
+      fxx = myFx(xx);
+      gxx = gradFx(xx)';
       fs = fxx;
       gs = gxx;
       gxx = gxx'*d;
       if (fxx > fx0 + c1*alphax*gx0) | ((i > 1) & (fxx >= fxp))
-        [alphas,fs,gs] = Zoom(myFx,myGx,x0,d,alphap,alphax,fx0,gx0);
+        [alphas,fs,gs] = Zoom(myFx,gradFx,x0,d,alphap,alphax,fx0,gx0);
         return;
       end
       if abs(gxx) <= -c2*gx0,
@@ -144,7 +137,7 @@ i=1;
         return;
       end
       if gxx >= 0,
-        [alphas,fs,gs] = Zoom(myFx,myGx,x0,d,alphax,alphap,fx0,gx0);
+        [alphas,fs,gs] = Zoom(myFx,gradFx,x0,d,alphax,alphap,fx0,gx0);
         return;
       end
 
@@ -164,7 +157,7 @@ i=1;
 end% end of strongwolfe
 
 %%%%%%%
-function [alphas,fs,gs] = Zoom(myFx,myGx,x0,d,alphal,alphah,fx0,gx0)
+function [alphas,fs,gs] = Zoom(myFx,gradFx,x0,d,alphal,alphah,fx0,gx0)
 % Algorithms 3.2 on page 59 in 
 % Numerical Optimization, by Nocedal and Wright
 % This function is called by strongwolfe
@@ -178,13 +171,13 @@ maxIter = 5;
        alphax = 0.5*(alphal+alphah);
        alphas = alphax;
        xx = x0 + alphax*d;
-       fxx = feval(myFx,xx);
-       gxx = feval(myGx,xx)';
+       fxx = myFx(xx);
+       gxx = gradFx(xx)';
        fs = fxx;
        gs = gxx;
        gxx = gxx'*d;
        xl = x0 + alphal*d;
-       fxl = feval(myFx,xl);
+       fxl = myFx(xl);
        if ((fxx > fx0 + c1*alphax*gx0) | (fxx >= fxl)),
           alphah = alphax;
        else
