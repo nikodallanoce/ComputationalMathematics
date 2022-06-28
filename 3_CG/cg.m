@@ -17,10 +17,12 @@ function [x_k, k] = cg(A, x_0, b, tol)
 end
 
 function [x_k_next, r_k_next, p_k_next] = iteration(A, r_k, p_k, x_k)
-
-    a_k = (r_k'*r_k)/(p_k'*A*p_k);
+    
+    r_k_q = r_k'*r_k;
+    A_pk = A*p_k;
+    a_k = r_k_q/(p_k'*A_pk);
     x_k_next = x_k + a_k * p_k;
-    r_k_next = r_k + (a_k * A) * p_k; %aggiunta parentesi
-    B_k_next = (r_k_next' * r_k_next) / (r_k'*r_k);
+    r_k_next = r_k + a_k * A_pk;
+    B_k_next = (r_k_next' * r_k_next) / r_k_q;
     p_k_next = -r_k_next + B_k_next*p_k;
 end

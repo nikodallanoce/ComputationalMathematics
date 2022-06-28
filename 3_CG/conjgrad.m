@@ -9,7 +9,7 @@ function x = conjgrad(A, b, x)
         x = x + alpha * p;
         r = r - alpha * Ap;
         rsnew = r' * r;
-        if sqrt(rsnew) < 1e-10
+        if sqrt(rsnew) < 1e-14
               break
         end
         p = r + (rsnew / rsold) * p;
