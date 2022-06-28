@@ -12,7 +12,9 @@ for k=1:1:1000
     pk = -compute_direction(grad_k, s_mem, y_mem, H0, k); % search direction
     % compute the step size by doing a line search
     if Wolfe
-        alpha = ArmijoWolfe(f, grad, pk, xk);
+        %alpha = ArmijoWolfe(f, grad, pk, xk); %OLD implementation
+        alpha = strong_wolfe_line_search(f,grad,pk,xk); %JP implementation
+        %alpha = Strongwolfe(f,grad,pk,xk,f(xk),grad(xk)'); %CH implementation 
     else
         alpha = BLS(f, grad, xk, pk, 1e-4, 0.5, 1);
     end
