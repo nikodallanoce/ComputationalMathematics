@@ -11,7 +11,7 @@ function [x_k, k] = cg(A, x_0, b, tol)
         k=k+1;
 
         if(mod(k,5)==0)
-            disp(k);
+            %disp(k);
         end
     end
 end
@@ -19,8 +19,8 @@ end
 function [x_k_next, r_k_next, p_k_next] = iteration(A, r_k, p_k, x_k)
 
     a_k = (r_k'*r_k)/(p_k'*A*p_k);
-    x_k_next = x_k + a_k*p_k;
-    r_k_next = r_k +a_k * A * p_k;
+    x_k_next = x_k + a_k * p_k;
+    r_k_next = r_k + (a_k * A) * p_k; %aggiunta parentesi
     B_k_next = (r_k_next' * r_k_next) / (r_k'*r_k);
     p_k_next = -r_k_next + B_k_next*p_k;
 end

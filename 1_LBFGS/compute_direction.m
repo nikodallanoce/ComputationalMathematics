@@ -8,7 +8,7 @@ Input:
     is a column
     y: (matrix) l difference between gradients defined as y_k=\nabla
     f_{k+1}-\nabla f_{k}, each element is a column
-    I: (matrix) nxn identity matrix
+    H0: (matrix) nxn identity matrix
     k: (int) current iteration
 Output:
     r: (array) current search direction defined as H_k \nabla f_k
@@ -36,7 +36,7 @@ H0 = gamma * H0;
 r = H0 * q;
 
 for i = 1:nc
-    beta= rho(i) * y(:, i)' * r;
+    beta = rho(i) * y(:, i)' * r;
     r = r + s(:, i)*(alpha(i) - beta);
 end
 end
