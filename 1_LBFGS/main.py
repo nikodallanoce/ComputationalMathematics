@@ -67,8 +67,8 @@ if __name__ == '__main__':
         g_ris = grad_lls(w, (XtX, ytX2))
         tol = 1e-12
         opt_bfgs = {'gtol': 1e-12, 'disp':False}
-        opt_lbfgs = {'disp': True, 'maxcor': 1, 'ftol': 1e-12, 'gtol': 1e-12, 'eps': 1e-12, 'maxfun': 15000,
-                     'maxiter': 15000, 'iprint': -1, 'maxls': 20, 'finite_diff_rel_step': None}
+        opt_lbfgs = {'disp': True, 'maxcor': 20, 'ftol': 1e-12, 'gtol': 1e-12, 'eps': 1e-12, 'maxfun': 15000,
+                     'maxiter': 15000, 'iprint': -1, 'maxls': 1000, 'finite_diff_rel_step': None}
         ris = minimize(fun=f_lls, x0=w, args=arguments, method='L-BFGS-B', jac=grad_lls, tol=tol, options=opt_lbfgs,
                        callback=call)
 
