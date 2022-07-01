@@ -18,15 +18,15 @@ x0 = randn(length(A),1);
 L = chol(A, 'lower');
 M = L'*L;
 
-tol = 1e-10;
+tol = 1e-14;
 [x, k] = cg(A, x0, b, tol);
 [x_w] = conjgrad(A, b, x0);
-[x_p, k_p] = pre_cg(A, x0, b, tol);
+%[x_p, k_p] = pre_cg(A, x0, b, tol);
 [x_m] = pcg(A, b, tol);
 [x_ti, k_ti] = cg_tizio(x0, A, b, tol);
 
 disp(norm(x - w_star))
 disp(norm(x_w - w_star))
-disp(norm(x_p - w_star))
+%disp(norm(x_p - w_star))
 disp(norm(x_ti - w_star))
 disp(norm(x_m - w_star))
