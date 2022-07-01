@@ -22,12 +22,12 @@ end
 
 function [x_k_next, r_k_next, p_k_next, y_k_next] = iteration(A, r_k, p_k, x_k, y_k, M)
     
-    r_k_q = r_k'*y_k;
-    A_pk = A*p_k;
-    a_k = r_k_q/(p_k'*A_pk);
+    %r_k_q = r_k'*y_k;
+    %A_pk = A*p_k;
+    a_k = r_k' * y_k /(p_k' * A * p_k);   
     x_k_next = x_k + a_k * p_k;
-    r_k_next = r_k + a_k * A_pk;
+    r_k_next = r_k + a_k * A * p_k;
     y_k_next = M\r_k_next;
-    B_k_next = (r_k_next' * y_k_next) / r_k_q;
-    p_k_next = -y_k_next + B_k_next*p_k;
+    B_k_next = r_k_next' * y_k_next / (r_k' * y_k);
+    p_k_next = -y_k_next + B_k_next * p_k;
 end
