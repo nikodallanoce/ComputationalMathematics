@@ -4,8 +4,9 @@ function [x_k, k] = cg(A, x_0, b, tol)
     p_k = -r_k;
     x_k = x_0;
     k = 0;
+    tolb = tol*norm(b);
 
-    while(norm(r_k)>tol)
+    while(norm(r_k)>tolb)
         
         [x_k, r_k, p_k] = iteration(A, r_k, p_k, x_k);
         k=k+1;
