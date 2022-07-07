@@ -1,13 +1,16 @@
-function [x_k, k] = cg(A, x_0, b, tol)
+function [x_k, k, errors] = cg(A, x_0, b, tol, x_star)
 
     r_k = A*x_0 - b;
     p_k = -r_k;
     x_k = x_0;
     k = 0;
+    tolb = tol*norm(b);
+    errors = [];
 
-    while(norm(r_k)>tol)
+    while(norm(r_k)>tolb)
         
         [x_k, r_k, p_k] = iteration(A, r_k, p_k, x_k);
+        errors = [errors norm(x_star - x_k)];
         k=k+1;
 
         if(mod(k,5)==0)
