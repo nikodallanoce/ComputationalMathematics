@@ -23,7 +23,7 @@ b = X_hat' * y_hat;
 x0 = zeros(length(A),1);
 %x0 = x0/norm(x0);
 
-tol = 1e-12;
+tol = 1e-14;
 [x, k, ~] = cg_opt(sparse(X_hat), x0, b, tol, w_star);
 [x_z, k_z, ~] = cg(A, x0, b, tol, w_star);
 [x_w] = conjgrad(A, b, x0);
@@ -39,3 +39,4 @@ disp(norm(x_z - w_star))
 %disp(norm(x_p - w_star))
 %disp(norm(x_mb - w_star))
 disp(norm(x_m - w_star))
+disp(norm(X_hat * x - y_hat)/norm(y_hat))

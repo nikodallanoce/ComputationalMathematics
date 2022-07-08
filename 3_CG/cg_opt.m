@@ -4,13 +4,13 @@ function [x_k, k, errors] = cg_opt(A, x_0, b, tol, x_star)
     p_k = -r_k;
     x_k = x_0;
     k = 0;
-    tolb = tol;%*norm(b);
+    tolb = tol*norm(b);
     errors = [];
 
     while(norm(r_k)>tolb)
         
-        [x_k, r_k, p_k] = iteration(A, r_k, p_k, x_k);
         errors = [errors norm(x_star - x_k)];
+        [x_k, r_k, p_k] = iteration(A, r_k, p_k, x_k);        
         k=k+1;
 
         if(mod(k,5)==0)
