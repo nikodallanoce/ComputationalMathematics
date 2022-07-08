@@ -10,5 +10,5 @@ b = X_hat' * y_hat;
 x0 = zeros(length(w_star),1);
 tol = 1e-12;
 
-[x, k] = gd(grad_lls, x0, tol, 0.00005, 0,9);
+[x, k] = gd(grad_lls, x0, tol, 0.005, 0.9);
 disp(norm(x-w_star));
