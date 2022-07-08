@@ -1,5 +1,5 @@
 clear;
-
+%rng(1);
 addpath ../utilities;
 [X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", 1e-2);
 rmpath ../utilities;
@@ -20,21 +20,22 @@ A = X_hat' * X_hat;
 b = X_hat' * y_hat;
 
 
-x0 = randn(length(A),1);
+x0 = zeros(length(A),1);
 %x0 = x0/norm(x0);
 
 tol = 1e-12;
-[x, k] = cg(A, x0, b, tol);
-[x_z, k_z] = cg(A, zeros(length(A),1), b, tol);
+[x, k, ~] = cg_opt(sparse(X_hat), x0, b, tol, w_star);
+[x_z, k_z, ~] = cg(A, x0, b, tol, w_star);
 [x_w] = conjgrad(A, b, x0);
-L = full(ichol(sparse(A)));
-[x_p, k_p] = pre_cg(A, zeros(length(A),1), b, tol, L*L');
-%[x_mb] = pcg_mat(A, b, tol, 100, L*L');
+alpha = max(sum(abs(A),2)./diag(A))-2;
+%L = full(ichol(sparse(A), struct('type','ict','droptol',1e-10, 'diagcomp',alpha)));
+%[x_p, k_p] = pre_cg(A, zeros(length(A),1), b, tol, L*L');
+%[x_mb] = pcg_mat(A, b, tol, 100);
 [x_m] = pcg(A, b, tol, 100);
 %[x_ti, k_ti] = cg_tizio(x0, A, b, tol);
 
 disp(norm(x - w_star))
 disp(norm(x_z - w_star))
-disp(norm(x_p - w_star))
+%disp(norm(x_p - w_star))
 %disp(norm(x_mb - w_star))
 disp(norm(x_m - w_star))
