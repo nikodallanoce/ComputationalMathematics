@@ -6,12 +6,9 @@ addpath ../utilities;
 rmpath ../utilities;
 
 % Compute the solution using standard momentum descent (heavy ball)
-
 b = X_hat' * y_hat;
-hess = 2* (X_hat' * X_hat); 
 x0 = zeros(length(w_star),1);
-tol = 1e-10;
+tol = 1e-12;
 
-[x, k] = gd(f_lls, hess, x0, b, tol, 0.5, 0.5);
-
+[x, k] = gd(grad_lls, x0, tol, 0.00005, 0,9);
 disp(norm(x-w_star));
