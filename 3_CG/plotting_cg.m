@@ -1,61 +1,62 @@
 clear;
-
 addpath ../utilities;
-
 %lambdas = [1e5, 1e4, 1e3, 1e2, 1e1, 1e0, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5];
 lambdas = [1e4, 1e2, 1e0, 1e-2, 1e-4];
 times = zeros(length(lambdas),1);
-errors = [];
+errors = {};
 ks = zeros(length(lambdas),1);
 for i=1:length(lambdas)
     [X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", lambdas(i));
-    %rmpath ../utilities;
   
-    % Compute the solution using conjugate gradient
-
+    % compute the solution using conjugate gradient
     b = X_hat' * y_hat;
 
-    %fprintf("%e %e\n", lambdas(i), cond(A))
+    %fprintf("%e %e\n", lambdas(i), cond(X_hat))
     %disp([lambdas(i), cond(A)])
 
-    x0 = zeros(length(w_star),1);
-    
-    tol = 1e-14;
+    x0 = zeros(length(w_star), 1); 
     
     time_elapsed = tic;
-    [x, k, err] = cg_opt(sparse(X_hat), x0, b, tol, w_star);
+    [x, k, err] = cg_opt(sparse(X_hat), x0, b, 1e-14, w_star);
     time_elapsed = toc(time_elapsed);
     times(i) = time_elapsed;
     errors = [errors err];
     ks(i) = k;
 end
-
+rmpath ../utilities;
+% build rates
 linear = zeros(length(max(ks)), 1);
-linear(1) = max(errors);
-for i = 2:max(ks)
+max_err = 0;
+for i=1:length(errors)
+    curr_errors = cell2mat(errors(i));
+    if max(curr_errors)>max_err
+        max_err = max(curr_errors);
+    end
+end
+linear(1) = max_err;
+quadratic(1) = max_err;
+for i=2:max(ks)
     linear(i) = linear(1)/pow2(i-1);
 end
-s = 1;
-e = ks(1);
-semilogy(errors(s:e),'LineWidth',2);
+
+% plot rates
+semilogy(linear, 'LineWidth', 1);
 hold on;
-for i=2:length(ks)
-    s = e+1;
-    e = ks(i) + s - 1;
-    semilogy(errors(s:e), 'LineWidth',2);
+
+% plot errors
+for i=1:length(ks)
+    semilogy(cell2mat(errors(i)), 'LineWidth', 1);
 end
-semilogy(linear, 'LineWidth',2);
 hold off;
 grid on;
 
-x_lab = strings(length(lambdas)+1,1);
+% insert labels
+labels = strings(length(lambdas)+1, 1);
+labels(1) = "linear";
 for i=1:length(lambdas)
-    x_lab(i)=num2str(lambdas(i),"%.1e");
+    labels(i+1) = num2str(lambdas(i), "%.1e");
 end
-x_lab(end) = "linear";
-legend(x_lab);
+legend(labels);
 title("||w-w*|| by varying lambda values")
 xlabel("iterations");
-ylabel("Log10 error")
-
-%plot(times);
+ylabel("error")
