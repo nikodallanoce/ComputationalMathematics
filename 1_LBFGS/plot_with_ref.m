@@ -1,6 +1,6 @@
 
 clear;
-%rng(1);
+rng(1);
 addpath ../utilities;
 addpath ArmijoWolfeImplementations\;
 [X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", 1e-4);
@@ -8,8 +8,8 @@ addpath ArmijoWolfeImplementations\;
 rmpath ../utilities;
 
 % Compute the solution using L-BFGS
-w = zeros(size(w));
-[w_our, k, residuals, errors, p_errors] = LBFGS(w, f_lls, grad_lls, X_hat, y_hat, 20, 1e-14, true, true, w_star);
+w = randn(size(w));
+[w_our, k, residuals, errors, p_errors] = LBFGS(w, f_lls, grad_lls, sparse(X_hat), y_hat, 20, 1e-14, true, true, w_star);
 
 [m,n] = size(errors);
 quad = [errors(1,1)];
