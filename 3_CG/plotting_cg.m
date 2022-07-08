@@ -24,7 +24,7 @@ for i=1:length(lambdas)
     tol = 1e-12;
     
     time_elapsed = tic;
-    [x, k, err] = cg(A, x0, b, tol, w_star);
+    [x, k, err] = cg_opt(X_hat, x0, b, tol, w_star);
     time_elapsed = toc(time_elapsed);
     times(i) = time_elapsed;
     errors = [errors err];
@@ -32,7 +32,7 @@ for i=1:length(lambdas)
 end
 
 linear = zeros(length(max(ks)), 1);
-linear(1) = errors(1,ks(3));
+linear(1) = max(errors);
 for i = 1:max(ks)
     linear(i) = linear(1)/(2^i);
 end
