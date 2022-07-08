@@ -11,20 +11,19 @@ for i=1:length(lambdas)
     [X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", lambdas(i));
     %rmpath ../utilities;
   
-    % Compute the solution using conjugate
-    
-    A = X_hat' * X_hat;
+    % Compute the solution using conjugate gradient
+
     b = X_hat' * y_hat;
 
     %fprintf("%e %e\n", lambdas(i), cond(A))
     %disp([lambdas(i), cond(A)])
 
-    x0 = zeros(length(A),1);
+    x0 = zeros(length(w_star),1);
     
-    tol = 1e-12;
+    tol = 1e-14;
     
     time_elapsed = tic;
-    [x, k, err] = cg_opt(X_hat, x0, b, tol, w_star);
+    [x, k, err] = cg_opt(sparse(X_hat), x0, b, tol, w_star);
     time_elapsed = toc(time_elapsed);
     times(i) = time_elapsed;
     errors = [errors err];
@@ -33,8 +32,8 @@ end
 
 linear = zeros(length(max(ks)), 1);
 linear(1) = max(errors);
-for i = 1:max(ks)
-    linear(i) = linear(1)/(2^i);
+for i = 2:max(ks)
+    linear(i) = linear(1)/pow2(i-1);
 end
 s = 1;
 e = ks(1);
