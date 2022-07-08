@@ -6,7 +6,7 @@ if exist("y", "var")
     y_exists = true;
     Q1y=y;
 else
-    U = {};
+    U = [];
 end
 for j = 1:min(m-1,n)
     [u, s] = householder_vector(A(j:end, j));
