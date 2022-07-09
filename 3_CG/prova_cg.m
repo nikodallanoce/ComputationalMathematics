@@ -1,7 +1,7 @@
 clear;
 %rng(1);
 addpath ../utilities;
-[X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", 1e-2);
+[X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", 1e4);
 rmpath ../utilities;
 
 % Compute the solution using conjugate 
