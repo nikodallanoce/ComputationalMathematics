@@ -7,7 +7,7 @@ if exist("y", "var")
     Q1y=y;
 else
     U = {};
-    fprintf("No expected values were passed, Q1 will be fully computed");
+    fprintf("No expected values were passed, Q1 will be fully computed\n");
 end
 for j = 1:min(m-1, n)
     [u, s] = householder_vector(A(j:end, j));
