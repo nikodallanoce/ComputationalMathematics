@@ -19,7 +19,7 @@ df = grad(x)';
 v = 0;
 errors = norm(x-x_star);
 residuals = resid_fun(x);
-while(norm(df)>tol && k<1000)
+while(norm(df)>tol && k<10000)
     v = v*alpha - eta*df./n;          % compute the direction v
     x = x + v;                        % uptade x
     df = grad(x)';                    % compute the new gradient

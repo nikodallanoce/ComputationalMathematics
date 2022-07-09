@@ -1,6 +1,6 @@
 clear;
 addpath ../utilities;
-[X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", 1e4);
+[X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", 1e-4);
 [f_lls, grad_lls] = build_lls(X_hat, y_hat);
 rmpath ../utilities;
 
@@ -13,5 +13,5 @@ rows_number = size(X_hat);
 rows_number = rows_number(1);
 
 resid_fun = @(xk) norm(X_hat*xk-y_hat)/norm(y_hat);
-[x, k, errors, residuals] = gd(grad_lls, x0, w_star,resid_fun, tol, 0.00001, 0.2, rows_number);
+[x, k, errors, residuals] = gd(grad_lls, x0, w_star,resid_fun, tol, 0.004, 0.9, rows_number);
 disp(norm(x-w_star));
