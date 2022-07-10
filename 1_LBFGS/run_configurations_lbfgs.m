@@ -13,11 +13,11 @@ for r=1: runs
         curr_l=l(i);
         for j=1:length(lambda)
             curr_lambda = lambda(j);
-            [X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", lambda(j));
+            [X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", curr_lambda);
             [f_lls, grad_lls] = build_lls(X_hat, y_hat);
             w = zeros(size(w));            
             tic;
-             [~, k, residue, error] = LBFGS(w, f_lls, grad_lls, X_hat, y_hat, 5, 1e-14, true, false, w_star);
+             [~, k, residue, error] = LBFGS(w, f_lls, grad_lls, X_hat, y_hat, l(i), 1e-14, true, false, w_star);
             elapsed = toc;
             fprintf("Config: l= %d, lambda= %.1e, resid= %e, error= %.6e, iter= %d, time= %.2f\n", curr_l, curr_lambda, residue(end), error(end), k, elapsed)
             residues(ind, r, 1:length(residue)) = residue;
