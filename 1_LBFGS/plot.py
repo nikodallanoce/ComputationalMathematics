@@ -2,6 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from numpy import genfromtxt
 
 """
 Script that plot the error and residual for ArmijoWolf and BLS,
@@ -49,49 +50,30 @@ def get_l_from_filename(filename):
 
 def plot_from_error_matrix(file_path):
     # matrices = pd.read_csv(file_path).values
-    algo_type = ["Armijo-Wolfe", "BLS"]
+    algo_type = ["Our L-BFGS", "BLS"]
     algo_id = 0
     matrices = np.loadtxt(open(file_path, "rb"), delimiter=",")
-    titles = [["Config: l= 5, lambda= 1.0e+04, resid= 9.991491e-01, error= 1.201558e-19, iter= 7, time= 0.11",
-"Config: l= 5, lambda= 1.0e+02, resid= 7.678201e-01, error= 9.306596e-14, iter= 57, time= 1.03",
-"Config: l= 5, lambda= 1.0e+00, resid= 3.910228e-02, error= 1.012390e-08, iter= 1000, time= 15.72",
-"Config: l= 5, lambda= 1.0e-02, resid= 3.917733e-04, error= 1.932545e-05, iter= 963, time= 14.54",
-"Config: l= 5, lambda= 1.0e-04, resid= 6.890539e-05, error= 1.757153e+00, iter= 1000, time= 18.03",
-"Config: l= 10, lambda= 1.0e+04, resid= 9.991491e-01, error= 1.201558e-19, iter= 7, time= 0.11",
-"Config: l= 10, lambda= 1.0e+02, resid= 7.678201e-01, error= 2.635659e-14, iter= 23, time= 0.37",
-"Config: l= 10, lambda= 1.0e+00, resid= 3.910228e-02, error= 2.754078e-10, iter= 394, time= 5.85",
-"Config: l= 10, lambda= 1.0e-02, resid= 3.917733e-04, error= 2.731865e-06, iter= 462, time= 6.87",
-"Config: l= 10, lambda= 1.0e-04, resid= 1.831870e-04, error= 5.826962e+00, iter= 1000, time= 17.46",
-"Config: l= 15, lambda= 1.0e+04, resid= 9.991491e-01, error= 1.201558e-19, iter= 7, time= 0.11",
-"Config: l= 15, lambda= 1.0e+02, resid= 7.678201e-01, error= 2.198338e-14, iter= 22, time= 0.37",
-"Config: l= 15, lambda= 1.0e+00, resid= 3.910228e-02, error= 1.579172e-10, iter= 246, time= 4.07",
-"Config: l= 15, lambda= 1.0e-02, resid= 3.917733e-04, error= 3.096434e-06, iter= 355, time= 5.80",
-"Config: l= 15, lambda= 1.0e-04, resid= 3.511251e-05, error= 1.110167e+00, iter= 514, time= 9.71",
-"Config: l= 20, lambda= 1.0e+04, resid= 9.991491e-01, error= 1.201558e-19, iter= 7, time= 0.12",
-"Config: l= 20, lambda= 1.0e+02, resid= 7.678201e-01, error= 5.923229e-17, iter= 22, time= 0.33",
-"Config: l= 20, lambda= 1.0e+00, resid= 3.910228e-02, error= 1.602522e-10, iter= 139, time= 2.07",
-"Config: l= 20, lambda= 1.0e-02, resid= 3.917733e-04, error= 3.574270e-06, iter= 222, time= 3.35",
-"Config: l= 20, lambda= 1.0e-04, resid= 1.170137e-04, error= 3.720827e+00, iter= 1000, time= 20.67"],
-              ["Config: l= 5, lambda= 1.0e+04, error= 2.363891e-19, iter= 7, time= 0.09",
-"Config: l= 5, lambda= 1.0e+02, error= 4.331375e-11, iter= 62, time= 0.61",
-"Config: l= 5, lambda= 1.0e+00, error= 7.013071e-07, iter= 566, time= 5.20",
-"Config: l= 5, lambda= 1.0e-02, error= 1.291312e-04, iter= 722, time= 7.44",
-"Config: l= 5, lambda= 1.0e-04, error= 3.816404e+01, iter= 222, time= 2.08",
-"Config: l= 10, lambda= 1.0e+04, error= 2.363891e-19, iter= 7, time= 0.07",
-"Config: l= 10, lambda= 1.0e+02, error= 1.002460e-11, iter= 43, time= 0.42",
-"Config: l= 10, lambda= 1.0e+00, error= 2.436646e-08, iter= 329, time= 3.22",
-"Config: l= 10, lambda= 1.0e-02, error= 2.749345e-06, iter= 382, time= 4.50",
-"Config: l= 10, lambda= 1.0e-04, error= 3.816404e+01, iter= 141, time= 1.76",
-"Config: l= 15, lambda= 1.0e+04, error= 2.363891e-19, iter= 7, time= 0.08",
-"Config: l= 15, lambda= 1.0e+02, error= 4.074650e-14, iter= 43, time= 0.57",
-"Config: l= 15, lambda= 1.0e+00, error= 1.103407e-07, iter= 216, time= 2.55",
-"Config: l= 15, lambda= 1.0e-02, error= 1.250372e-05, iter= 348, time= 3.62",
-"Config: l= 15, lambda= 1.0e-04, error= 3.816404e+01, iter= 126, time= 1.33",
-"Config: l= 20, lambda= 1.0e+04, error= 2.363891e-19, iter= 7, time= 0.08",
-"Config: l= 20, lambda= 1.0e+02, error= 1.728218e-13, iter= 34, time= 0.40",
-"Config: l= 20, lambda= 1.0e+00, error= 4.434701e-08, iter= 126, time= 1.33",
-"Config: l= 20, lambda= 1.0e-02, error= 2.788019e-06, iter= 191, time= 2.00",
-"Config: l= 20, lambda= 1.0e-04, error= 3.816404e+01, iter= 84, time= 0.92"]]
+    titles = [["Config: l= 5, lambda= 1.0e+04, resid= 1.681830e-14, error= 1.153604e-19, iter= 6, time= 0.04",
+"Config: l= 5, lambda= 1.0e+02, resid= 4.710781e-13, error= 4.977292e-15, iter= 33, time= 0.19",
+"Config: l= 5, lambda= 1.0e+00, resid= 2.564892e-12, error= 4.424762e-13, iter= 427, time= 2.06",
+"Config: l= 5, lambda= 1.0e-02, resid= 3.103823e-12, error= 4.888334e-13, iter= 444, time= 2.06",
+"Config: l= 5, lambda= 1.0e-04, resid= 9.072225e-13, error= 1.541013e-13, iter= 483, time= 2.24",
+"Config: l= 10, lambda= 1.0e+04, resid= 2.070003e-14, error= 1.397690e-19, iter= 11, time= 0.06",
+"Config: l= 10, lambda= 1.0e+02, resid= 1.981172e-14, error= 1.457003e-16, iter= 33, time= 0.16",
+"Config: l= 10, lambda= 1.0e+00, resid= 1.842840e-12, error= 2.698870e-13, iter= 298, time= 1.40",
+"Config: l= 10, lambda= 1.0e-02, resid= 1.179156e-12, error= 2.823700e-13, iter= 377, time= 1.79",
+"Config: l= 10, lambda= 1.0e-04, resid= 8.393129e-13, error= 1.366311e-13, iter= 346, time= 1.65",
+"Config: l= 15, lambda= 1.0e+04, resid= 1.811295e-14, error= 1.075699e-19, iter= 16, time= 0.08",
+"Config: l= 15, lambda= 1.0e+02, resid= 4.642184e-15, error= 4.896675e-17, iter= 20, time= 0.09",
+"Config: l= 15, lambda= 1.0e+00, resid= 3.856914e-13, error= 8.937306e-14, iter= 241, time= 1.15",
+"Config: l= 15, lambda= 1.0e-02, resid= 5.634758e-13, error= 1.094280e-13, iter= 272, time= 1.32",
+"Config: l= 15, lambda= 1.0e-04, resid= 1.290701e-12, error= 3.258238e-13, iter= 226, time= 1.09",
+"Config: l= 20, lambda= 1.0e+04, resid= 3.285985e-14, error= 1.110496e-19, iter= 21, time= 0.10",
+"Config: l= 20, lambda= 1.0e+02, resid= 7.239102e-15, error= 5.405260e-17, iter= 22, time= 0.10",
+"Config: l= 20, lambda= 1.0e+00, resid= 1.059309e-13, error= 1.958291e-14, iter= 135, time= 0.65",
+"Config: l= 20, lambda= 1.0e-02, resid= 2.059713e-12, error= 3.418793e-13, iter= 125, time= 0.60",
+"Config: l= 20, lambda= 1.0e-04, resid= 4.561325e-13, error= 7.689193e-14, iter= 152, time= 0.76"],
+              []]
     lambdas = ["1e4", "1e2", "1", "1e-2", "1e-4"]
     l = [5, 10, 15, 20]
     for i in range(matrices.shape[0]):
@@ -103,41 +85,85 @@ def plot_from_error_matrix(file_path):
         quadratic = np.log10([errors[0]]+[errors[0] / pow(2, 2 ** i) for i in range(7)])
         plt.plot(linear, label="linear")
         plt.plot(quadratic, label="quadratic")
+        if i > 14:
+            scipy_data = genfromtxt('scipy_errors{}.csv'.format((i % 5)), delimiter=',')
+            scipy_data[0] = errors[0]
+            plt.plot(np.log10(scipy_data), label="Scipy L-BFGS")
         plt.legend()
         plt.xlabel("iterations")
         plt.ylabel("Log error")
-        plt.title(algo_type[algo_id]+"\n"+titles[algo_id][i])
+        plt.title("Armijo-Wolfe\n"+titles[algo_id][i])
         plt.grid(True)
-        plt.savefig("./plots/bls/{}_l{}_lambd{}.png".format(algo_type[algo_id], l[int(np.floor(i/5))], lambdas[i % 5]))
-        # plt.show()
-        plt.clf()
+        # plt.savefig("./plots/wolfe/aw_l{}_lambda{}.png".format(l[int(np.floor(i/5))], lambdas[i % 5]))
+        plt.show()
+        # plt.clf()
 
 
-plot_from_error_matrix("testgrid/wolfe_errors_config_jp.csv")
+def mean_std_errors(file_paths):
+    run1 = np.loadtxt(open(file_paths[0], "rb"), delimiter=",")
+    run2 = np.loadtxt(open(file_paths[1], "rb"), delimiter=",")
+    run3 = np.loadtxt(open(file_paths[2], "rb"), delimiter=",")
+    mat = np.zeros((20, 3))
+    for j in range(run1.shape[0]):
+        vect = run1[j, :]
+        vect = vect[vect != -1]
+        mat[j, 0] = vect[-2]
+    for j in range(run2.shape[0]):
+        vect = run2[j, :]
+        val = vect[vect != -1][-2]
+        mat[j, 1] = val
+    for j in range(run3.shape[0]):
+        vect = run3[j, :]
+        val = vect[vect != -1][-2]
+        mat[j, 2] = val
+    print(mat)
+    for l in mat:
+        print("mean:{0:.2e} std:{1:.2e}".format(np.mean(l), np.std(l)))
+
+
+def var_in_lambda(file_path):
+    matrices = np.loadtxt(open(file_path, "rb"), delimiter=",")
+    titles = [["Config: l= 5, lambda= 1.0e+04, resid= 1.681830e-14, error= 1.153604e-19, iter= 6, time= 0.04",
+"Config: l= 5, lambda= 1.0e+02, resid= 4.710781e-13, error= 4.977292e-15, iter= 33, time= 0.19",
+"Config: l= 5, lambda= 1.0e+00, resid= 2.564892e-12, error= 4.424762e-13, iter= 427, time= 2.06",
+"Config: l= 5, lambda= 1.0e-02, resid= 3.103823e-12, error= 4.888334e-13, iter= 444, time= 2.06",
+"Config: l= 5, lambda= 1.0e-04, resid= 9.072225e-13, error= 1.541013e-13, iter= 483, time= 2.24",
+"Config: l= 10, lambda= 1.0e+04, resid= 2.070003e-14, error= 1.397690e-19, iter= 11, time= 0.06",
+"Config: l= 10, lambda= 1.0e+02, resid= 1.981172e-14, error= 1.457003e-16, iter= 33, time= 0.16",
+"Config: l= 10, lambda= 1.0e+00, resid= 1.842840e-12, error= 2.698870e-13, iter= 298, time= 1.40",
+"Config: l= 10, lambda= 1.0e-02, resid= 1.179156e-12, error= 2.823700e-13, iter= 377, time= 1.79",
+"Config: l= 10, lambda= 1.0e-04, resid= 8.393129e-13, error= 1.366311e-13, iter= 346, time= 1.65",
+"Config: l= 15, lambda= 1.0e+04, resid= 1.811295e-14, error= 1.075699e-19, iter= 16, time= 0.08",
+"Config: l= 15, lambda= 1.0e+02, resid= 4.642184e-15, error= 4.896675e-17, iter= 20, time= 0.09",
+"Config: l= 15, lambda= 1.0e+00, resid= 3.856914e-13, error= 8.937306e-14, iter= 241, time= 1.15",
+"Config: l= 15, lambda= 1.0e-02, resid= 5.634758e-13, error= 1.094280e-13, iter= 272, time= 1.32",
+"Config: l= 15, lambda= 1.0e-04, resid= 1.290701e-12, error= 3.258238e-13, iter= 226, time= 1.09",
+"Config: l= 20, lambda= 1.0e+04, resid= 3.285985e-14, error= 1.110496e-19, iter= 21, time= 0.10",
+"Config: l= 20, lambda= 1.0e+02, resid= 7.239102e-15, error= 5.405260e-17, iter= 22, time= 0.10",
+"Config: l= 20, lambda= 1.0e+00, resid= 1.059309e-13, error= 1.958291e-14, iter= 135, time= 0.65",
+"Config: l= 20, lambda= 1.0e-02, resid= 2.059713e-12, error= 3.418793e-13, iter= 125, time= 0.60",
+"Config: l= 20, lambda= 1.0e-04, resid= 4.561325e-13, error= 7.689193e-14, iter= 152, time= 0.76"], []]
+    plt.figure(figsize=(10, 4), dpi=80)
+    indices = [1, 6, 11, 16]
+    l = [5, 10, 15, 20]
+    for l_ind, i in enumerate(indices):
+        errors = matrices[i, :]
+        errors = errors[errors != -1]
+        plt.plot([i for i in range(len(errors))], np.log10(errors), label="l={}".format(l[l_ind]))
+    linear = np.log10([errors[0] / pow(2, i) for i in range(50)])
+    quadratic = np.log10([errors[0]] + [errors[0] / pow(2, 2 ** i) for i in range(7)])
+    plt.plot(linear, label="linear")
+    plt.plot(quadratic, label="quadratic")
+    plt.legend()
+    plt.xlabel("iterations")
+    plt.ylabel("Log error")
+    plt.title("Comparison using different l values\n" + "lambda=1e2")
+    plt.grid(True)
+    plt.show()
+
+
+# mean_std_errors(['residues1.csv', 'residues2.csv', 'residues3.csv'])
+# mean_std_errors(['errors1.csv', 'errors2.csv', 'errors3.csv'])
+plot_from_error_matrix("errors2.csv")
 print("done")
-
-"""folder_path = "results2/"
-filenames = os.listdir(folder_path)
-wolf_err_list = []
-wolf_res_list = []
-bls_err_list = []
-bls_res_list = []
-for f in filenames:
-    df = pd.read_csv("{}{}".format(folder_path, f), header=None)
-    if "wolf" in f:
-        if "err" in f:
-            wolf_err_list.append((get_l_from_filename(f), df))
-        else:
-            wolf_res_list.append((get_l_from_filename(f), df))
-    else:
-        if "err" in f:
-            bls_err_list.append((get_l_from_filename(f), df))
-        else:
-            bls_res_list.append((get_l_from_filename(f), df))
-
-lambdas = [1, 1e-2, 1e-4, 1e-8]
-lamda_index = 3
-
-error_residual_plot("ArmijoWolfe", wolf_err_list, wolf_res_list, lamda_index=lamda_index)
-error_residual_plot("BLS", bls_err_list, bls_res_list, lamda_index=lamda_index)"""
 

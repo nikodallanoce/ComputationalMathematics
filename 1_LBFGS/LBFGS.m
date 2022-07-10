@@ -5,7 +5,7 @@ s_mem = zeros(length(xk), l); % displacements between next and current points
 y_mem = zeros(length(xk), l); % displacements between next and current gradients
 x_next = zeros(length(xk));
 H0 = eye(size(X, 2));
-residuals = norm(X*xk-y)/norm(y);
+residuals = norm(xk-x_star)/norm(x_star);
 errors = norm(xk-x_star);
 p_errors = abs(f(xk)-f(x_star));
 for k=1:1:1000
@@ -48,7 +48,7 @@ for k=1:1:1000
     end
 
     % compute metrics
-    residuals = [residuals norm(X*xk-y)/norm(y)];
+    residuals = [residuals norm(xk-x_star)/norm(x_star)];
     errors = [errors norm(xk-x_star)];
     p_errors = [p_errors abs(f(xk)-f(x_star))];
 
