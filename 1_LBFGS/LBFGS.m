@@ -6,7 +6,7 @@ y_mem = zeros(length(xk), l); % displacements between next and current gradients
 x_next = zeros(length(xk));
 H0 = eye(size(X, 2));
 residuals = norm(X*xk-y)/norm(y);
-errors = norm(xk-x_star);
+errors = norm(xk-x_star)/norm(x_star);
 p_errors = abs(f(xk)-f(x_star));
 for k=1:1:1000
     pk = -compute_direction(grad_k, s_mem, y_mem, H0, k); % search direction
@@ -49,7 +49,7 @@ for k=1:1:1000
 
     % compute metrics
     residuals = [residuals norm(X*xk-y)/norm(y)];
-    errors = [errors norm(xk-x_star)];
+    errors = [errors norm(xk-x_star)/norm(x_star)];
     p_errors = [p_errors abs(f(xk)-f(x_star))];
 
     % stop if the gradient is smaller than the tolerance
