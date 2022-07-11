@@ -5,7 +5,7 @@ x_k = x_0; % current point
 k = 0; % iteration
 tolb = tol*norm(b); % stop condition
 errors = norm(x_star-x_k);
-
+disp(tolb);
 while(norm(r_k)>tolb)   
     [x_k, r_k, p_k] = iteration(A, r_k, p_k, x_k);
     errors = [errors norm(x_star - x_k)];

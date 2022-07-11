@@ -20,7 +20,7 @@ for i=1:length(lambdas)
     [x, k, err] = cg_opt(sparse(X_hat), x0, b, 1e-14, w_star);
     time_elapsed = toc(time_elapsed);
     times(i) = time_elapsed;
-    errors = [errors err];
+    errors = [errors err/norm(w_star)];
     ks(i) = k;
 end
 rmpath ../utilities;
@@ -33,30 +33,40 @@ for i=1:length(errors)
         max_err = max(curr_errors);
     end
 end
-linear(1) = max_err;
-quadratic(1) = max_err;
-for i=2:max(ks)
-    linear(i) = linear(1)/pow2(i-1);
-end
 
-% plot rates
-semilogy(linear, 'LineWidth', 1);
-hold on;
+[m,n] = size(errors);
+err1 = cell2mat(errors(1,1));
+err1 = err1(1);
+quad = err1;
+lin = zeros(size(errors));
+lin(1) = err1;
+for i = 2:20
+    lin(i) = lin(1)/(2^(i-1));
+    if (i<8)
+        quad = [quad quad(1)/power(2, 2^(i-1))];
+    end
+end
 
 % plot errors
 for i=1:length(ks)
+    if (i == 1)
+        semilogy(lin, 'LineWidth', 1);
+        hold on;   
+        semilogy(quad, 'LineWidth', 1);
+    end
     semilogy(cell2mat(errors(i)), 'LineWidth', 1);
 end
 hold off;
 grid on;
 
 % insert labels
-labels = strings(length(lambdas)+1, 1);
-labels(1) = "linear";
+labels = strings(length(lambdas), 1);
+%labels(1) = "linear";
 for i=1:length(lambdas)
-    labels(i+1) = num2str(lambdas(i), "%.1e");
+    labels(i) = num2str(lambdas(i), "%.1e");
 end
-legend(labels);
-title("||w-w*|| by varying lambda values")
-xlabel("iterations");
-ylabel("error")
+
+legend(["linear"; "quadratic"; labels], "Location", "southeast");
+title("CG convergence speed by varying lambda values")
+xlabel("steps");
+ylabel("$\frac{||w - w^{*}||}{ ||w^{*}||}$", 'Interpreter','latex');
