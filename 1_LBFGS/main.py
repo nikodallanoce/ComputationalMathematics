@@ -58,9 +58,9 @@ def call(xk) -> bool:
 if __name__ == '__main__':
     #np.random.seed(2)
     scipy_errors = []
-    num=0
+    num = 0
     for _lambda in lambdas:
-        X_hat, y_hat = build_matrix_y(1e4)
+        X_hat, y_hat = build_matrix_y(_lambda)
         w = np.zeros(X_hat.shape[1])
         # X_hat, y_hat, w = load_matrix_y_w("X_hat.mat", "y_hat.mat", "w.mat")
         ytX2: np.ndarray = 2 * y_hat.transpose().dot(X_hat)
@@ -105,6 +105,6 @@ if __name__ == '__main__':
         plt.ylabel("Log error")
         plt.grid(True)
         plt.legend()
-        # plt.show()
+        plt.show()
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

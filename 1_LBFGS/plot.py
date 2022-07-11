@@ -53,26 +53,26 @@ def plot_from_error_matrix(file_path):
     algo_type = ["Our L-BFGS", "BLS"]
     algo_id = 0
     matrices = np.loadtxt(open(file_path, "rb"), delimiter=",")
-    titles = [["Config: l= 5, lambda= 1.0e+04, resid= 1.681830e-14, error= 1.153604e-19, iter= 6, time= 0.04",
-"Config: l= 5, lambda= 1.0e+02, resid= 4.710781e-13, error= 4.977292e-15, iter= 33, time= 0.19",
-"Config: l= 5, lambda= 1.0e+00, resid= 2.564892e-12, error= 4.424762e-13, iter= 427, time= 2.06",
-"Config: l= 5, lambda= 1.0e-02, resid= 3.103823e-12, error= 4.888334e-13, iter= 444, time= 2.06",
-"Config: l= 5, lambda= 1.0e-04, resid= 9.072225e-13, error= 1.541013e-13, iter= 483, time= 2.24",
-"Config: l= 10, lambda= 1.0e+04, resid= 2.070003e-14, error= 1.397690e-19, iter= 11, time= 0.06",
-"Config: l= 10, lambda= 1.0e+02, resid= 1.981172e-14, error= 1.457003e-16, iter= 33, time= 0.16",
-"Config: l= 10, lambda= 1.0e+00, resid= 1.842840e-12, error= 2.698870e-13, iter= 298, time= 1.40",
-"Config: l= 10, lambda= 1.0e-02, resid= 1.179156e-12, error= 2.823700e-13, iter= 377, time= 1.79",
-"Config: l= 10, lambda= 1.0e-04, resid= 8.393129e-13, error= 1.366311e-13, iter= 346, time= 1.65",
-"Config: l= 15, lambda= 1.0e+04, resid= 1.811295e-14, error= 1.075699e-19, iter= 16, time= 0.08",
-"Config: l= 15, lambda= 1.0e+02, resid= 4.642184e-15, error= 4.896675e-17, iter= 20, time= 0.09",
-"Config: l= 15, lambda= 1.0e+00, resid= 3.856914e-13, error= 8.937306e-14, iter= 241, time= 1.15",
-"Config: l= 15, lambda= 1.0e-02, resid= 5.634758e-13, error= 1.094280e-13, iter= 272, time= 1.32",
-"Config: l= 15, lambda= 1.0e-04, resid= 1.290701e-12, error= 3.258238e-13, iter= 226, time= 1.09",
-"Config: l= 20, lambda= 1.0e+04, resid= 3.285985e-14, error= 1.110496e-19, iter= 21, time= 0.10",
-"Config: l= 20, lambda= 1.0e+02, resid= 7.239102e-15, error= 5.405260e-17, iter= 22, time= 0.10",
-"Config: l= 20, lambda= 1.0e+00, resid= 1.059309e-13, error= 1.958291e-14, iter= 135, time= 0.65",
-"Config: l= 20, lambda= 1.0e-02, resid= 2.059713e-12, error= 3.418793e-13, iter= 125, time= 0.60",
-"Config: l= 20, lambda= 1.0e-04, resid= 4.561325e-13, error= 7.689193e-14, iter= 152, time= 0.76"],
+    titles = [["Config: l= 5, lambda= 1.0e+04",
+"Config: l= 5, lambda= 1.0e+02",
+"Config: l= 5, lambda= 1.0e+00",
+"Config: l= 5, lambda= 1.0e-02",
+"Config: l= 5, lambda= 1.0e-04",
+"Config: l= 10, lambda= 1.0e+04",
+"Config: l= 10, lambda= 1.0e+02",
+"Config: l= 10, lambda= 1.0e+00",
+"Config: l= 10, lambda= 1.0e-02",
+"Config: l= 10, lambda= 1.0e-04",
+"Config: l= 15, lambda= 1.0e+04",
+"Config: l= 15, lambda= 1.0e+02",
+"Config: l= 15, lambda= 1.0e+00",
+"Config: l= 15, lambda= 1.0e-02",
+"Config: l= 15, lambda= 1.0e-04",
+"Config: l= 20, lambda= 1.0e+04",
+"Config: l= 20, lambda= 1.0e+02",
+"Config: l= 20, lambda= 1.0e+00",
+"Config: l= 20, lambda= 1.0e-02",
+"Config: l= 20, lambda= 1.0e-04"],
               []]
     lambdas = ["1e4", "1e2", "1", "1e-2", "1e-4"]
     l = [5, 10, 15, 20]
@@ -92,7 +92,7 @@ def plot_from_error_matrix(file_path):
         plt.legend()
         plt.xlabel("iterations")
         plt.ylabel("Log error")
-        plt.title("Armijo-Wolfe\n"+titles[algo_id][i])
+        plt.title("Comparison with an off-the-shelf solver\n"+titles[algo_id][i])
         plt.grid(True)
         # plt.savefig("./plots/wolfe/aw_l{}_lambda{}.png".format(l[int(np.floor(i/5))], lambdas[i % 5]))
         plt.show()
