@@ -1,7 +1,7 @@
 clear;
 %rng(1);
 addpath ../utilities;
-[X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", 1e4);
+[X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", 0);
 rmpath ../utilities;
 
 % Compute the solution using conjugate 
@@ -24,7 +24,7 @@ x0 = zeros(length(A),1);
 %x0 = x0/norm(x0);
 
 tol = 1e-14;
-[x, k, ~] = cg_opt(sparse(X_hat), x0, b, tol, w_star);
+[x, k, errors] = cg_opt(sparse(X_hat), x0, b, tol, w_star);
 [x_z, k_z, ~] = cg(A, x0, b, tol, w_star);
 [x_w] = conjgrad(A, b, x0);
 alpha = max(sum(abs(A),2)./diag(A))-2;
@@ -35,8 +35,11 @@ alpha = max(sum(abs(A),2)./diag(A))-2;
 %[x_ti, k_ti] = cg_tizio(x0, A, b, tol);
 
 disp(norm(x - w_star))
-disp(norm(x_z - w_star))
-%disp(norm(x_p - w_star))
-%disp(norm(x_mb - w_star))
-disp(norm(x_m - w_star))
 disp(norm(X_hat * x - y_hat)/norm(y_hat))
+
+e = @(i) power(((sqrt(cond(X_hat)) - 1)/(sqrt(cond(X_hat)) + 1)),i);
+err = @(x) 0.5*((x-w_star)'*X_hat')*X_hat*(x-w_star);
+err_0 = err(x0);
+err_star = err(x);
+e_t = err_star/err_0;
+max_iter = ceil(0.5*sqrt(cond(A))*log(1/e_t));
