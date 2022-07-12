@@ -1,5 +1,6 @@
 function [residues, errors, times, iters, config] = run_configurations_lbfgs(runs, l, lambda, tol, Wolfe)
 addpath ../utilities;
+addpath ArmijoWolfeImplementations\;
 tot_runs = length(lambda)*length(l);
 residues = -ones(tot_runs, runs, 1000);
 errors = -ones(tot_runs, runs, 1000);
@@ -19,7 +20,7 @@ for r=1: runs
             tic;
              [~, k, residue, error] = LBFGS(w, f_lls, grad_lls, X_hat, y_hat, l(i), 1e-14, true, false, w_star);
             elapsed = toc;
-            fprintf("Config: l= %d, lambda= %.1e, resid= %e, error= %.6e, iter= %d, time= %.2f\n", curr_l, curr_lambda, residue(end), error(end), k, elapsed)
+            fprintf("Config: l= %d, lambda= %.1e, resid= %e, error= %.6e, iter= %d, time= %.2f\n", curr_l, curr_lambda, residue(end), error(end), k, elapsed);
             residues(ind, r, 1:length(residue)) = residue;
             errors(ind,r, 1:length(error)) = error;
             times(ind,r) = elapsed;

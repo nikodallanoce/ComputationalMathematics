@@ -92,7 +92,8 @@ def plot_from_error_matrix(file_path):
         plt.legend()
         plt.xlabel("iterations")
         plt.ylabel("Log error")
-        plt.title("Comparison with an off-the-shelf solver\n"+titles[algo_id][i])
+        # plt.title("Armijo-Wolfe\n"+titles[algo_id][i])
+        plt.title("Comparison with an off-the-shelf solver\n" + titles[algo_id][i])
         plt.grid(True)
         # plt.savefig("./plots/wolfe/aw_l{}_lambda{}.png".format(l[int(np.floor(i/5))], lambdas[i % 5]))
         plt.show()
@@ -123,26 +124,26 @@ def mean_std_errors(file_paths):
 
 def var_in_lambda(file_path):
     matrices = np.loadtxt(open(file_path, "rb"), delimiter=",")
-    titles = [["Config: l= 5, lambda= 1.0e+04, resid= 1.681830e-14, error= 1.153604e-19, iter= 6, time= 0.04",
-"Config: l= 5, lambda= 1.0e+02, resid= 4.710781e-13, error= 4.977292e-15, iter= 33, time= 0.19",
-"Config: l= 5, lambda= 1.0e+00, resid= 2.564892e-12, error= 4.424762e-13, iter= 427, time= 2.06",
-"Config: l= 5, lambda= 1.0e-02, resid= 3.103823e-12, error= 4.888334e-13, iter= 444, time= 2.06",
-"Config: l= 5, lambda= 1.0e-04, resid= 9.072225e-13, error= 1.541013e-13, iter= 483, time= 2.24",
-"Config: l= 10, lambda= 1.0e+04, resid= 2.070003e-14, error= 1.397690e-19, iter= 11, time= 0.06",
-"Config: l= 10, lambda= 1.0e+02, resid= 1.981172e-14, error= 1.457003e-16, iter= 33, time= 0.16",
-"Config: l= 10, lambda= 1.0e+00, resid= 1.842840e-12, error= 2.698870e-13, iter= 298, time= 1.40",
-"Config: l= 10, lambda= 1.0e-02, resid= 1.179156e-12, error= 2.823700e-13, iter= 377, time= 1.79",
-"Config: l= 10, lambda= 1.0e-04, resid= 8.393129e-13, error= 1.366311e-13, iter= 346, time= 1.65",
-"Config: l= 15, lambda= 1.0e+04, resid= 1.811295e-14, error= 1.075699e-19, iter= 16, time= 0.08",
-"Config: l= 15, lambda= 1.0e+02, resid= 4.642184e-15, error= 4.896675e-17, iter= 20, time= 0.09",
-"Config: l= 15, lambda= 1.0e+00, resid= 3.856914e-13, error= 8.937306e-14, iter= 241, time= 1.15",
-"Config: l= 15, lambda= 1.0e-02, resid= 5.634758e-13, error= 1.094280e-13, iter= 272, time= 1.32",
-"Config: l= 15, lambda= 1.0e-04, resid= 1.290701e-12, error= 3.258238e-13, iter= 226, time= 1.09",
-"Config: l= 20, lambda= 1.0e+04, resid= 3.285985e-14, error= 1.110496e-19, iter= 21, time= 0.10",
-"Config: l= 20, lambda= 1.0e+02, resid= 7.239102e-15, error= 5.405260e-17, iter= 22, time= 0.10",
-"Config: l= 20, lambda= 1.0e+00, resid= 1.059309e-13, error= 1.958291e-14, iter= 135, time= 0.65",
-"Config: l= 20, lambda= 1.0e-02, resid= 2.059713e-12, error= 3.418793e-13, iter= 125, time= 0.60",
-"Config: l= 20, lambda= 1.0e-04, resid= 4.561325e-13, error= 7.689193e-14, iter= 152, time= 0.76"], []]
+    titles = [["Config: l= 5, lambda= 1.0e+04, resid= 9.995807e-01, error= 1.673263e-14, iter= 7, time= 0.04",
+"Config: l= 5, lambda= 1.0e+02, resid= 8.189265e-01, error= 5.182123e-14, iter= 66, time= 0.34",
+"Config: l= 5, lambda= 1.0e+00, resid= 4.658075e-02, error= 1.060092e-12, iter= 512, time= 2.67",
+"Config: l= 5, lambda= 1.0e-02, resid= 4.067113e-04, error= 7.924396e-13, iter= 519, time= 3.00",
+"Config: l= 5, lambda= 1.0e-04, resid= 5.085703e-06, error= 1.016759e-12, iter= 452, time= 2.48",
+"Config: l= 10, lambda= 1.0e+04, resid= 9.997820e-01, error= 3.032756e-14, iter= 11, time= 0.06",
+"Config: l= 10, lambda= 1.0e+02, resid= 9.476044e-01, error= 5.586512e-14, iter= 31, time= 0.17",
+"Config: l= 10, lambda= 1.0e+00, resid= 5.837749e-02, error= 5.487410e-13, iter= 318, time= 1.65",
+"Config: l= 10, lambda= 1.0e-02, resid= 5.308875e-04, error= 7.301883e-13, iter= 409, time= 2.11",
+"Config: l= 10, lambda= 1.0e-04, resid= 6.321317e-06, error= 1.095120e-12, iter= 362, time= 1.87",
+"Config: l= 15, lambda= 1.0e+04, resid= 9.998782e-01, error= 3.207052e-14, iter= 16, time= 0.09",
+"Config: l= 15, lambda= 1.0e+02, resid= 8.920362e-01, error= 6.040599e-14, iter= 22, time= 0.12",
+"Config: l= 15, lambda= 1.0e+00, resid= 5.294190e-02, error= 7.013250e-13, iter= 186, time= 0.98",
+"Config: l= 15, lambda= 1.0e-02, resid= 4.209989e-04, error= 3.192818e-13, iter= 207, time= 1.10",
+"Config: l= 15, lambda= 1.0e-04, resid= 6.451557e-06, error= 6.100493e-13, iter= 251, time= 1.33",
+"Config: l= 20, lambda= 1.0e+04, resid= 9.998875e-01, error= 2.553744e-14, iter= 21, time= 0.12",
+"Config: l= 20, lambda= 1.0e+02, resid= 9.461350e-01, error= 7.180798e-15, iter= 21, time= 0.12",
+"Config: l= 20, lambda= 1.0e+00, resid= 6.065269e-02, error= 2.524833e-13, iter= 134, time= 0.71",
+"Config: l= 20, lambda= 1.0e-02, resid= 5.019611e-04, error= 1.465840e-13, iter= 78, time= 0.42",
+"Config: l= 20, lambda= 1.0e-04, resid= 4.620518e-06, error= 3.538826e-13, iter= 165, time= 0.88"], []]
     plt.figure(figsize=(10, 4), dpi=80)
     indices = [1, 6, 11, 16]
     l = [5, 10, 15, 20]
@@ -165,5 +166,6 @@ def var_in_lambda(file_path):
 # mean_std_errors(['residues1.csv', 'residues2.csv', 'residues3.csv'])
 # mean_std_errors(['errors1.csv', 'errors2.csv', 'errors3.csv'])
 plot_from_error_matrix("errors2.csv")
+# var_in_lambda("errors2.csv")
 print("done")
 
