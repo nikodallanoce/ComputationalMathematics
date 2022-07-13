@@ -1,4 +1,4 @@
-function [x, k, errors, residuals] = mgd(X,  x0, x_star, resid_fun, tol, alpha, b, fast)
+function [x, k, errors, residuals] = mgd_eqn(X,  x0, x_star, resid_fun, tol, alpha, b, fast)
 %{
 Performs an Gradient descent approach with momentum.
 Inputs:
