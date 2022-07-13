@@ -1,4 +1,4 @@
-function [x, k, errors, residuals] = mgd_eqn(X,  x0, x_star, resid_fun, tol, alpha, b, fast)
+function [x, k, errors, residuals] = mgd_eqn(X,  x0, x_star, resid_fun, tol, alpha, b, max_iters, fast, verbose)
 %{
 Performs an Gradient descent approach with momentum.
 Inputs:
@@ -27,7 +27,7 @@ patience_zig = 0;
 dx = 0;
 min_grad = inf;
 %eta = 0.00001; %BLS(f, df, x, 1e-4, 0.5, 1);
-while(n2df>tol && k<2e4)
+while(n2df>tol && k<max_iters)
     
     %r_k = - df(x);
     n2df = norm(r_k); 
@@ -50,7 +50,7 @@ while(n2df>tol && k<2e4)
     errors = [errors norm(x-x_star)];
 
     %residuals = [residuals resid_fun(x)];
-    if (~mod(k, 50))
+    if (~mod(k, 50)&&verbose)
     fprintf('%5d %1.16e\n', k, n2df);
     end
     k = k + 1;
