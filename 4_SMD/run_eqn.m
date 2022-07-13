@@ -1,8 +1,7 @@
-function [x, k, errors, residuals, final_err] = run(lambda, eta, alpha, verbose)
+function [x, k, errors, residuals, final_err] = run_eqn(lambda, alpha, verbose, max_iters)
     format long e;
     addpath ../utilities;
     [X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", lambda);
-    [f_lls, grad_lls] = build_lls(X_hat, y_hat);
     rmpath ../utilities;
     
     % Compute the solution using standard momentum descent (heavy ball)
@@ -13,6 +12,6 @@ function [x, k, errors, residuals, final_err] = run(lambda, eta, alpha, verbose)
     [rows_number, ~] = size(X_hat);
     
     resid_fun = @(xk) norm(X_hat*xk-y_hat)/norm(y_hat);
-    [x, k, errors, residuals] = mgd(X_hat,  x0, w_star, resid_fun, tol, eta, alpha, b, false, verbose);
+    [x, k, errors, residuals] = mgd_eqn(X_hat,  x0, w_star, resid_fun, tol, alpha, b,max_iters, false, verbose);
     final_err = norm(x-w_star);
 end
