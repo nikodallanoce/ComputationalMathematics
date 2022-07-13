@@ -1,6 +1,6 @@
 function [x_next, k, residuals, errors, p_errors] = LBFGS(x0, f, grad, X, y, l, tol, Wolfe, verbose, x_star)
-xk = x0; % current point
-grad_k = grad(x0)'; % gradient at the current point
+xk = x0;                      % current point
+grad_k = grad(x0)';           % gradient at the current point
 s_mem = zeros(length(xk), l); % displacements between next and current points
 y_mem = zeros(length(xk), l); % displacements between next and current gradients
 x_next = zeros(length(xk));
