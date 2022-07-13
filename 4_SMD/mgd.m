@@ -1,4 +1,4 @@
-function [x, k, errors, residuals] = mgd(f, grad, x, x_star, resid_fun, tol, alpha, n)
+function [x, k, errors, residuals] = mgd(f, grad, x, x_star, resid_fun, tol,eta, alpha, n, verbose)
 %{
 Performs an Gradient descent approach with momentum.
 Inputs:
@@ -23,8 +23,8 @@ df = grad(x)';
 x_prev = x;
 patience = 0;
 patience_zig = 0;
-while(norm(df)>tol && k<1e5)
-    eta = BLS(f, df, x, 1e-4, 0.5, 1);
+while(norm(df)>tol && k<1e4)
+    % eta = BLS(f, df, x, 1e-4, 0.5, 1);
     v = v*alpha - eta*df./n;          % compute the direction v
     x = x + v;
     df = grad(x)'; % uptade x
@@ -39,7 +39,9 @@ while(norm(df)>tol && k<1e5)
     if(norm(diff) < 1e-12)
         patience = patience + 1;
         if patience > 10
-            disp("STALL");
+            if verbose
+                disp("STALL");
+            end
             break;
         end
         else
@@ -50,7 +52,9 @@ while(norm(df)>tol && k<1e5)
         if(norm(grad_prev) < norm(df))
              patience_zig = patience_zig + 1;
              if patience_zig > 20
-                disp("STALL");
+                 if verbose
+                    disp("STALL");
+                 end
                 break;
             end
         end
@@ -59,7 +63,9 @@ while(norm(df)>tol && k<1e5)
 
     x_prev = x;
     %residuals = [residuals resid_fun(x)];
-    fprintf('%5d %1.16e\n', k, norm(df));
+    if verbose
+        fprintf('%5d %1.16e\n', k, norm(df));
+    end
 end
 end
 
