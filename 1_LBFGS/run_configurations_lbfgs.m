@@ -30,6 +30,8 @@ for r=1: runs
         end
     end
 end
+rmpath ../utilities;
+rmpath ArmijoWolfeImplementations\;
 %residues = residues./runs;
 %errors = errors./runs;
 %times = times./runs;
