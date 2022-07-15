@@ -13,7 +13,7 @@ for l = 1:length(lambdas)
 
     for j = 1:length(alphas)
         alpha = alphas(j);
-        [x, k, errors, residuals, abs_err] = run_eqn(lambda, alpha, verbose, 3e3);
+        [x, k, errors, residuals, abs_err] = run_eqn(lambda, alpha, verbose, 5e3);
         % disp(abs_err);
         if abs_err <= min_err
             final_alpha = alpha;
