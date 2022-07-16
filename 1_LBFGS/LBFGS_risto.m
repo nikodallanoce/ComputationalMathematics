@@ -3,7 +3,6 @@ xk = x0;
 grad_k = grad(x0)';
 sm = [];
 ym = [];
-pk = -grad_k; % first direction
 
 % metrics
 residuals = norm(X*xk-y)/norm(y);
@@ -14,15 +13,14 @@ if verbose
 end
 
 for k=1:1000
+    pk = -compute_direction(grad_k, sm, ym, k);
     if pk' * grad_k > 0
-        pk = -pk;
-    end
-
-    if k>1
-        pk = -compute_direction(grad_k, sm, ym);
+        %pk = -pk;
     end
 
     alpha = strong_wolfe_line_search(f, grad, pk, xk); % step size
+    %alpha = BLS(f, grad, xk, pk, 1e-4, 0.5, 1);
+    %alpha = ArmijoWolfe(f, grad, pk, xk);
 
     xk_prev = xk;
     grad_prev = grad_k;
@@ -38,7 +36,8 @@ for k=1:1000
     end
 
     if (sm(end)'*ym(end)<=0)
-        warning("Curvature condition does not hold")
+        warning("Curvature condition does not hold");
+        %break;
     end
 
     % compute metrics
@@ -59,19 +58,24 @@ if verbose && mod(k, 5) ~= 0
 end
 end
 
-function r = compute_direction(grad, s, y)
-q = grad;
-for i = size(s, 2):-1:1
-    rho(i) = 1 / (y(:, i)' * s(:, i));
-    alpha(i) = rho(i).* s(:, i)' * q;
-    q = q - alpha(i).* y(:, i);
-end
-
-gamma = s(:, end)'* y(:, end) / norm(y(:, end))^2;
-r = gamma.* q;
-
-for i = 1:size(s, 2)
-    beta = rho(i) * y(:, i)' * r;
-    r = r + s(:, i) * (alpha(i) - beta);
+function r = compute_direction(grad, s, y, k)
+if k == 1
+    r = grad;
+else
+    q = grad;
+    for i = size(s, 2):-1:1
+        rho(i) = 1 / (y(:, i)' * s(:, i));
+        alpha(i) = rho(i).* s(:, i)' * q;
+        q = q - alpha(i).* y(:, i);
+    end
+    
+    gamma = s(:, end)'* y(:, end) / norm(y(:, end))^2;
+    r = gamma.* q;
+    r = 1e-4.*q;
+    
+    for i = 1:size(s, 2)
+        beta = rho(i) * y(:, i)' * r;
+        r = r + s(:, i) * (alpha(i) - beta);
+    end
 end
 end
