@@ -1,33 +1,39 @@
-function [x_next, k, residuals, errors, p_errors] = LBFGS(x0, f, grad, X, y, l, tol, Wolfe, verbose, x_star)
+function [x_next, k, errors] = LBFGS(x0, f, grad, X, y, l, tol, verbose, x_star)
 xk = x0;                      % current point
-grad_k = grad(x0)';           % gradient at the current point
+grad = @(x) X'*(X*x) - y;
+grad_k = grad(x0);           % gradient at the current point
 s_mem = zeros(length(xk), l); % displacements between next and current points
 y_mem = zeros(length(xk), l); % displacements between next and current gradients
 x_next = zeros(length(xk));
 
-residuals = norm(X*xk-y)/norm(y);
 errors = norm(xk-x_star)/norm(x_star);
-p_errors = abs(f(xk)-f(x_star));
-for k=1:1:1000
+k = 1;
+while(k<1000)
+
     pk = -compute_direction(grad_k, s_mem, y_mem, k); % search direction
     % compute the step size by doing a line search
-    if Wolfe
-        %alpha = ArmijoWolfe(f, grad, pk, xk); %OLD implementation
-        %alpha = strong_wolfe_line_search(f,grad,pk,xk); %JP implementation
-        %alpha = Strongwolfe(f,grad,pk,xk,f(xk),grad(xk)'); %CH implementation 
-        alpha = strong_wolfe(f, grad, xk, f(xk), grad_k, pk);
-    else
-        alpha = BLS(f, grad, xk, pk, 1e-4, 0.5, 1);
-    end
-    
+   
+    %alpha = ArmijoWolfe(f, grad, pk, xk); %OLD implementation
+    %alpha = strong_wolfe_line_search(f,grad,pk,xk); %JP implementation
+    %alpha = Strongwolfe(f,grad,pk,xk,f(xk),grad(xk)'); %CH implementation
+    A_pk = X*pk;
+    alpha = -(grad_k'*pk)/(A_pk'*A_pk);
+    %alpha = strong_wolfe(f, grad, xk, f(xk), grad_k, pk);
+
     % compute the next point, gradient
     x_next = xk + alpha.*pk;
-    grad_next = grad(x_next)';
+    grad_next = grad(x_next);
 
     % compute the displacements
     x_displacement = x_next-xk;
     yk = grad_next - grad_k;
 
+    if(x_displacement'*yk <= 0)
+        warning("curvature");
+    end
+
+    grad_k = grad_next;
+    xk = x_next;
     % memory handling
     if k > l
         s_mem(:, 1:end-1) = s_mem(:, 2:end);
@@ -40,32 +46,23 @@ for k=1:1:1000
     end
     
     % update the parameters
-    grad_k = grad_next;
-    xk = x_next;
+   
 
     % print current state of L-BFGS
     if verbose && (mod(k, 5) == 0 || k == 1)
          fprintf('%5d %1.2e %1.2e\n', k, alpha, norm(grad_k));
     end
 
-    % compute metrics
-    residuals = [residuals norm(X*xk-y)/norm(y)];
+    % compute metrics     
     errors = [errors norm(xk-x_star)/norm(x_star)];
-    p_errors = [p_errors abs(f(xk)-f(x_star))];
 
     % stop if the gradient is smaller than the tolerance
-    if Wolfe && norm(grad_k) < tol
+    k = k+1;
+    if norm(pk) < tol %|| norm(yk) < tol
         break;
-    else
-        if k <= l
-            norm_y = norm(y_mem(k));
-        else
-            norm_y = norm(y_mem(end));
-        end
-        if norm(grad_k) < tol || norm_y < tol
-            break;
-        end
     end
+   
+    
 end
 if verbose && mod(k, 5) ~= 0
     fprintf('%5d %1.2e %1.2e\n', k, alpha, norm(grad_k));
@@ -101,7 +98,7 @@ for i = nc:-1:1
     q = q - alpha(i).* y(:, i);
 end
 
-gamma = -1;
+gamma = 1;
 if k > 1
     gamma = s(:, nc)'*y(:, nc) / (y(:, nc)'*y(:, nc));
 end
@@ -129,14 +126,14 @@ function [alpha] = strong_wolfe(func, grad, x0, f0, g0, p)
 
 % initialize variables
 c1 = 1e-4;
-c2 = 0.9;
-alpha_max = 2.5;
+c2 = 0.2;
+alpha_max = 3;
 alpha_im1 = 0;
 alpha_i = 1;
 f_im1 = f0;
 dphi0 = transpose(g0)*p;
 i = 0;
-max_iters = 20;
+max_iters = 10;
 
 % search for alpha that satisfies strong-Wolfe conditions
 while true
@@ -145,7 +142,7 @@ while true
   f_i = func(x);
   g_i = grad(x)';
   if (f_i > f0 + c1*dphi0) || ( (i > 1) && (f_i >= f_im1) )
-    alpha = alpha_zoom(func, grad, x0,f0,g0,p,alpha_im1,alpha_i);
+    alpha = alpha_zoom(func, grad, x0, f0,g0,p,alpha_im1,alpha_i);
     break;
   end
   dphi = transpose(g_i)*p;
@@ -161,7 +158,7 @@ while true
   % update
   alpha_im1 = alpha_i;
   f_im1 = f_i;
-  alpha_i = alpha_i + 0.8*(alpha_max-alpha_i);
+  alpha_i = alpha_i + 0.5*(alpha_max-alpha_i);
   
   if (i > max_iters)
     alpha = alpha_i;
@@ -190,9 +187,9 @@ function [alpha] = alpha_zoom(func, grad, x0,f0,g0,p,alpha_lo,alpha_hi)
 
 % initialize variables
 c1 = 1e-4;
-c2 = 0.9;
+c2 = 0.2;
 i = 0;
-max_iters = 20;
+max_iters = 15;
 dphi0 = transpose(g0)*p;
 
 while true
