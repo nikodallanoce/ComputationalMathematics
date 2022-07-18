@@ -1,4 +1,4 @@
-function [x_next, k, errors] = LBFGS(x0, f, grad, X, y, l, tol, verbose, x_star)
+function [x_next, k, errors, residual] = LBFGS(x0, f, grad, X, y, l, tol, verbose, x_star)
 xk = x0;                      % current point
 grad = @(x) X'*(X*x) - y;
 grad_k = grad(x0);           % gradient at the current point
@@ -7,6 +7,7 @@ y_mem = zeros(length(xk), l); % displacements between next and current gradients
 x_next = zeros(length(xk));
 
 errors = norm(xk-x_star)/norm(x_star);
+residual = 0;
 k = 1;
 while(k<1000)
 
@@ -53,6 +54,7 @@ while(k<1000)
     % stop if the gradient is smaller than the tolerance
     k = k+1;
     if norm(pk) < tol %|| norm(yk) < tol
+        residual = 0;
         break;
     end
    
