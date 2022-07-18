@@ -1,32 +1,33 @@
-function [xk, k, residuals, errors] = LBFGS_risto(x0, f, grad, X, y, l, tol, verbose, x_star)
+function [xk, k, errors] = LBFGS_risto(x0, X, y, l, tol, verbose, x_star)
 xk = x0;
-grad_k = grad(x0)';
+grad = @(w) X'*(X*w) - y;
+grad_k = grad(x0);
 sm = [];
 ym = [];
 
 % metrics
-residuals = norm(X*xk-y)/norm(y);
 errors = norm(xk-x_star)/norm(x_star);
 
+% print starting state of L-BFGS
 if verbose
     fprintf('%5d %1.2e %1.2e\n', 0, errors(end), norm(grad_k));
 end
 
 for k=1:1000
+    % compute search direction
     pk = -compute_direction(grad_k, sm, ym, k);
-    if pk' * grad_k > 0
-        %pk = -pk;
-    end
 
-    alpha = strong_wolfe_line_search(f, grad, pk, xk); % step size
-    %alpha = BLS(f, grad, xk, pk, 1e-4, 0.5, 1);
-    %alpha = ArmijoWolfe(f, grad, pk, xk);
+    % compute step size by exact line search
+    A_pk = X*pk;
+    alpha = -(grad_k'*pk)/(A_pk'*A_pk);
 
+    % update step and gradient
     xk_prev = xk;
     grad_prev = grad_k;
     xk = xk + alpha.* pk;
-    grad_k = grad(xk)';
+    grad_k = grad(xk);
 
+    % memory handling
     sm = [sm xk - xk_prev];
     ym = [ym grad_k - grad_prev];
 
@@ -35,13 +36,11 @@ for k=1:1000
         ym(:, 1) = [];
     end
 
-    if (sm(end)'*ym(end)<=0)
-        warning("Curvature condition does not hold");
-        %break;
+    if (sm(:, end)'*ym(:, end)<=0)
+        fprintf("Curvature condition does not hold");
     end
 
     % compute metrics
-    residuals = [residuals norm(X*xk-y)/norm(y)];
     errors = [errors norm(xk-x_star)/norm(x_star)];
 
     % print current state of L-BFGS
@@ -49,10 +48,13 @@ for k=1:1000
          fprintf('%5d %1.2e %1.2e\n', k, errors(end), norm(grad_k));
     end
 
-    if norm(grad_k) <= tol || norm(ym(end)) <= tol
+    % stop if the norm of the direction is less than the tolerance
+    if norm(pk) <= tol
         break;
     end
 end
+
+% print final state of L-BFGS
 if verbose && mod(k, 5) ~= 0
      fprintf('%5d %1.2e %1.2e\n', k, errors(end), norm(grad_k));
 end
@@ -71,7 +73,6 @@ else
     
     gamma = s(:, end)'* y(:, end) / norm(y(:, end))^2;
     r = gamma.* q;
-    r = 1e-4.*q;
     
     for i = 1:size(s, 2)
         beta = rho(i) * y(:, i)' * r;

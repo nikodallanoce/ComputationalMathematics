@@ -11,11 +11,8 @@ k = 1;
 while(k<1000)
 
     pk = -compute_direction(grad_k, s_mem, y_mem, k); % search direction
+    
     % compute the step size by doing a line search
-   
-    %alpha = ArmijoWolfe(f, grad, pk, xk); %OLD implementation
-    %alpha = strong_wolfe_line_search(f,grad,pk,xk); %JP implementation
-    %alpha = Strongwolfe(f,grad,pk,xk,f(xk),grad(xk)'); %CH implementation
     A_pk = X*pk;
     alpha = -(grad_k'*pk)/(A_pk'*A_pk);
     %alpha = strong_wolfe(f, grad, xk, f(xk), grad_k, pk);
@@ -44,9 +41,6 @@ while(k<1000)
         s_mem(:, k) = x_displacement;
         y_mem(:, k) = yk;
     end
-    
-    % update the parameters
-   
 
     % print current state of L-BFGS
     if verbose && (mod(k, 5) == 0 || k == 1)
