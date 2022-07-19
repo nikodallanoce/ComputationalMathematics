@@ -30,10 +30,9 @@ min_grad = inf;
 while(n2df>tol && k<max_iters)
     
     %r_k = - df(x);
-    n2df = norm(r_k); 
     r_k_q = r_k'*r_k;
     A_rk = X*r_k;
-      
+    n2df = norm(r_k); 
     % update parameters
     eta = r_k_q/(A_rk'*A_rk);
 
@@ -45,7 +44,6 @@ while(n2df>tol && k<max_iters)
     else
          r_k = r_k  - eta * (X' * A_rk);
     end
-    
     
     errors = [errors norm(x-x_star)];
 
