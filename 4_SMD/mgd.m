@@ -9,7 +9,6 @@ function [x, k, errors, residuals] = mgd(X,  x0, x_star, resid_fun, tol, eta, al
 %       eta         learning rate hyperparameter
 %       aplha       momentum hyperparameter
 %       b           arrays of expected values, \hat{X}'*\hat{y}
-%       fast        
 %       verbose     print state of the SMD during the iterations
 %
 % Output:
