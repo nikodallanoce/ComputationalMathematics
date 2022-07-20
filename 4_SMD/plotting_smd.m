@@ -2,10 +2,10 @@ clear;
 addpath ../utilities;
 %lambdas = [1e5, 1e4, 1e3, 1e2, 1e1, 1e0, 1e-1, 1e-2, 1e-3, 1e-4, 1e-5];
 lambdas = [1e4, 1e2, 1e0, 1e-2, 1e-4];
-alphas = [0, 0.1, 0.05, 0.1, 0.1];
+alphas = [0, 0.00, 0.03, 0.04, 0.03];
 times = zeros(length(lambdas),1);
 errors = {};
-tol = 6e-13;
+tol = 9e-13;
 ks = zeros(length(lambdas),1);
 for i=1:length(lambdas)
     [X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", lambdas(i));
@@ -60,7 +60,7 @@ for i=1:length(lambdas)
     labels(i) = num2str(lambdas(i), "%.1e");
 end
 
-legend(["sublinear"; labels], "Location", "southeast");
+legend(['sublinear'; labels], "Location", "southeast");
 title("GD convergence speed by varying lambda values")
 xlabel("steps");
 ylabel("$\frac{||w - w^{*}||}{ ||w^{*}||}$", 'Interpreter','latex');
