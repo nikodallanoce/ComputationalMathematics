@@ -1,23 +1,25 @@
 clear;
 
 lambdas = [1e4, 1e2, 1, 1e-2, 1e-4];
-alphas = 0.0:0.05:0.9;
+betas = 0.0:0.05:0.9;
 verbose = false;
 configs = zeros(length(lambdas),3);
 
 for l = 1:length(lambdas)
     lambda = lambdas(l);
     min_err = 1;
+    min_k = inf;
     final_alpha = 0;
     final_k = 0;
 
-    for j = 1:length(alphas)
-        alpha = alphas(j);
-        [x, k, errors, residuals, abs_err] = run_eqn(lambda, alpha, verbose, 5e3);
+    for j = 1:length(betas)
+        alpha = betas(j);
+        [x, k, errors, residuals, abs_err] = run_eqn(lambda, alpha, verbose, 3e3);
         % disp(abs_err);
-        if abs_err <= min_err
+        if k <= min_k
             final_alpha = alpha;
             min_err = abs_err;
+            min_k = k;
             final_k = k;
         end
         disp(alpha);
