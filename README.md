@@ -26,10 +26,11 @@ with $X$ the (tall thin) matrix from the ML-cup dataset by prof. Micheli, and $y
 ├── 📂4_SMD  # Standard momentum descent (heavy ball)
 │   └── 📄...
 ├── 📂datasets  # Datasets used by the project
-│   └── 📄...
+│   └── 🗃️ ML-CUP21-TR.csv
 ├── 📂report  # Project report
 │   └── 📄...
 ├── 📂utilities  # Methods for building the matrices, functions and gradients
-│   └── 📄...
+│   ├── 📄build_lls.m # method to build the function and gradient of lls
+│   └── 📄build_matrices.m # method to build the required matrices
 └── 📄README.md
 ```
