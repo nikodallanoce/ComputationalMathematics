@@ -1,18 +1,27 @@
 function [x, k, errors, residuals] = mgd(X,  x0, x_star, resid_fun, tol, eta, alpha, b, fast, verbose)
-%{
-Performs an Gradient descent approach with momentum.
-Inputs:
-    g         gradient of the function f
-    x         starting point
-    x_star    matlab solution
-    resid_fun function which compute the residual.
-    tol       tolerance for our norm(gradient)
-    eta       learning rate hyperparameter
-    aplha     momentum hyperparameter
-    n         dimension of the matrix, used for normalization
-              of the gradient.
-Output: solution of the problem, number of steps, errors and residuals.
-%}
+% Performs an Gradient descent approach with momentum.
+% Inputs:
+%       X           input matrix
+%       x0          starting point
+%       x_star      optimal solution
+%       resid_fun   function which compute the residual.
+%       tol         tolerance for our norm(gradient)
+%       eta         learning rate hyperparameter
+%       aplha       momentum hyperparameter
+%       b           arrays of expected values, \hat{X}'*\hat{y}
+%       fast        
+%       verbose     print state of the SMD during the iterations
+%
+% Output:
+%       x           solution
+%       k           number of steps
+%       errors      array of errors
+%       residuals   array of residuals
+%
+% Reference:
+%       Algorithm 6 from our report.
+%
+% Created by Niko Dalla Noce, Alessandro Ristori and Simone Rizzo
 %addpath("../1_LBFGS\ArmijoWolfeImplementations");
 k = 0;
 x=x0;
