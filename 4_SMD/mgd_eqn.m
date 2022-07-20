@@ -10,7 +10,6 @@ function [x, k, errors, residuals] = mgd_eqn(X,  x0, x_star, resid_fun, tol, alp
 %       aplha       momentum hyperparameter
 %       b           arrays of expected values, \hat{X}'*\hat{y}
 %       max_iters   maximum number of iterations
-%       fast        
 %       verbose     print state of the SMD during the iterations
 %
 % Output:
