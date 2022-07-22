@@ -14,5 +14,5 @@ x = R1 \ Q1y;
 [Q_t, R_t] = qr(X_hat, "econ");
 x_star = X_hat\y_hat;
 
-%[Q1, R1] = thinqr(X_hat);
+[Q1, R1] = thinqr(X_hat);
 %upper = cond(X_hat)*norm(Q1'*(X_hat*x-y_hat))/norm(X_hat*x)

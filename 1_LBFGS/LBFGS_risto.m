@@ -1,9 +1,31 @@
-function [xk, k, errors, residual] = LBFGS_risto(x0, X, y, y_hat, l, tol, verbose, x_star)
-xk = x0;
-grad = @(w) X'*(X*w) - y;
+function [xk, k, errors] = LBFGS_risto(x0, X, y, l, tol, verbose, x_star)
+% Limited memory BFGS (L-BFGS)
+% Inputs:
+%       x0          starting point
+%       X           input matrix
+%       y           array of expected values
+%       l           memory size
+%       tol         tolerance
+%       verbose     print state of the L-BFGS during the iterations
+%       x_star      optimal solution
+%
+% Output:
+%       xk          solution
+%       k           number of iterations spent by the method
+%       errors      array of errors computed at each iteration
+%
+% Reference:
+%       Algorithm 2 from our report, which is in turn based
+%       on Algorithm 7.5 from Jorge Nocedal and Stephen Wright,
+%       "Numerical optimization," Springer Science & Business Media, 2006.
+%
+% Created by Niko Dalla Noce, Alessandro Ristori and Simone Rizzo
+
+xk = x0; % starting point
+grad = @(w) X'*(X*w) - y; % gradient
 grad_k = grad(x0);
-sm = [];
-ym = [];
+sm = []; % array of displacements
+ym = []; % array of differences between gradients
 residual = 0;
 % metrics
 errors = norm(xk-x_star)/norm(x_star);
@@ -37,7 +59,7 @@ for k=1:1000
     end
 
     if (sm(:, end)'*ym(:, end)<=0)
-        fprintf("Curvature condition does not hold");
+        fprintf("Curvature condition does not hold\n");
     end
 
     % compute metrics
@@ -62,6 +84,23 @@ end
 end
 
 function r = compute_direction(grad, s, y, k)
+% Two loop recursion needed to compute the search direction for L-BFGS
+% Inputs:
+%       grad        gradient computed at current point
+%       s           displacements
+%       y           differences between gradients
+%       k           current iteration
+%
+% Output:
+%       r           H_k*\nabla f
+%
+% Reference:
+%       Algorithm 1 from our report, which is in turn based
+%       on Algorithm 7.4 from Jorge Nocedal and Stephen Wright,
+%       "Numerical optimization," Springer Science & Business Media, 2006.
+%
+%Created by Niko Dalla Noce, Alessandro Ristori and Simone Rizzo
+
 if k == 1
     r = grad;
 else
@@ -72,6 +111,7 @@ else
         q = q - alpha(i).* y(:, i);
     end
     
+    % we do not need to explicitly use H_k^0
     gamma = s(:, end)'* y(:, end) / norm(y(:, end))^2;
     r = gamma.* q;
     
