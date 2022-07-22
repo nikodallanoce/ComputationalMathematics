@@ -1,10 +1,10 @@
-function [xk, k, errors] = LBFGS_risto(x0, X, y, l, tol, verbose, x_star)
+function [xk, k, errors, residual] = LBFGS_risto(x0, X, y, y_hat, l, tol, verbose, x_star)
 xk = x0;
 grad = @(w) X'*(X*w) - y;
 grad_k = grad(x0);
 sm = [];
 ym = [];
-
+residual = 0;
 % metrics
 errors = norm(xk-x_star)/norm(x_star);
 
@@ -50,6 +50,7 @@ for k=1:1000
 
     % stop if the norm of the direction is less than the tolerance
     if norm(pk) <= tol
+        residual = norm(X*xk-y_hat)/norm(y_hat);
         break;
     end
 end
