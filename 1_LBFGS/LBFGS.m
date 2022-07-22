@@ -54,7 +54,7 @@ while(k<1000)
     % stop if the gradient is smaller than the tolerance
     k = k+1;
     if norm(pk) < tol %|| norm(yk) < tol
-        residual = 0;
+        residual = norm(X*xk-y)/norm(y);
         break;
     end
    
