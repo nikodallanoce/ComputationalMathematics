@@ -7,7 +7,7 @@ rmpath ../utilities;
 % Compute the solution using L-BFGS
 w = zeros(size(w));
 b = X_hat'*y_hat;
-[w_our, k, errors, resid] = LBFGS_risto(w, sparse(X_hat), b, y_hat, 20, 1e-14, true, w_star);
+[w_our, k, errors, resid] = LBFGS(w, sparse(X_hat), b, y_hat, 20, 1e-14, true, w_star);
 
 disp(norm(w_our-w_star)/norm(w_star));
 lin = zeros(size(errors));
