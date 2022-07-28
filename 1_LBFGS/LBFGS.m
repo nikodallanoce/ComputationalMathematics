@@ -3,7 +3,8 @@ function [xk, k, errors, residual] = LBFGS(x0, X, y, y_hat, l, tol, verbose, x_s
 % Inputs:
 %       x0          starting point
 %       X           input matrix
-%       y           array of expected values
+%       y           array of expected values of the form \hat{X}'*\hat{y}
+%       y_hat       starting array of expected values
 %       l           memory size
 %       tol         tolerance
 %       verbose     print state of the L-BFGS during the iterations
@@ -13,6 +14,7 @@ function [xk, k, errors, residual] = LBFGS(x0, X, y, y_hat, l, tol, verbose, x_s
 %       xk          solution
 %       k           number of iterations spent by the method
 %       errors      array of errors computed at each iteration
+%       residual    the final residual norm(\hat{X}w-\hat{y})/norm(\hat{y})
 %
 % Reference:
 %       Algorithm 2 from our report, which is in turn based
