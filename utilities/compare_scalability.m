@@ -13,7 +13,7 @@ smd_times = zeros(1, runs);
 for i=1:runs
     m = 1000+(i-1)*250;
     x_axis(i) = m;
-    n = 200;
+    n = 200+(i-1)*50;
     A = rand(m, n);
     y = randn(m, 1);
     x0 = zeros(n, 1);
@@ -58,6 +58,6 @@ plot(x_axis, smd_times);
 legend(["L-BFGS", "thin QR", "CG", "SMD"]);
 xlabel('matrix rows');
 ylabel('average time (seconds)');
-title('Completion time by varying number of rows');
+title('Execution time by varying both sizes');
 hold off;
 grid on;
