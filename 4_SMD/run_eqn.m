@@ -2,7 +2,7 @@ function [x, k, errors, residuals, final_err] = run_eqn(lambda, alpha, verbose, 
     format long e;
     addpath ../utilities;
     rng(0);
-    [X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", lambda);
+    [X_hat, y_hat, ~, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", lambda);
     rmpath ../utilities;
     
     % Compute the solution using standard momentum descent (heavy ball)
