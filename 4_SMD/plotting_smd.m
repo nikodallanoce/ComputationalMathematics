@@ -10,7 +10,7 @@ ks = zeros(length(lambdas),1);
 for i=1:length(lambdas)
     [X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", lambdas(i));
   
-    % compute the solution using conjugate gradient
+    % compute the solution using standard momentum descent
     b = X_hat' * y_hat;
     resid_fun = @(xk) norm(X_hat*xk - y_hat)/norm(y_hat);
     x0 = zeros(length(w_star), 1); 
