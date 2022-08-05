@@ -8,7 +8,7 @@ function [xk, k, x_hist] = LBFGS(x0, X, y, l, tol, verbose, max_iters)
 %       tol         tolerance
 %       verbose     print state of the L-BFGS during the iterations
 %       x_star      optimal solution
-%       max_iters    maximum number of iterations
+%       max_iters   maximum number of iterations
 %
 % Output:
 %       xk          solution
