@@ -1,7 +1,7 @@
 function [x_k, k, errors, errors_A] = cg_opt(A, x_0, b, tol, w_star)
-% Conjugate gradient (cg)
+% Conjugate gradient (cg) optimal version
 % Inputs:
-%       A           input matrix
+%       A           sparse input matrix
 %       x0          starting point
 %       b           array of expected values
 %       tol         tolerance

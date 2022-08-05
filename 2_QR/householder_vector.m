@@ -12,6 +12,7 @@ function [u, s] = householder_vector(x)
 %       Algorithm 4 from our report.
 %
 % Created by Niko Dalla Noce, Alessandro Ristori and Simone Rizzo
+
 s = norm(x);
 if x(1) >= 0, s = -s; end
 v = x;

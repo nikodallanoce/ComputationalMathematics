@@ -13,11 +13,9 @@ tol = 1e-12;
 
 [rows_number, ~] = size(X_hat);
 
-resid_fun = @(xk) norm(X_hat*xk - y_hat)/norm(y_hat);
-%grad_lls = @(x) (X_hat'*(X_hat*x) - X_hat'*y_hat)';
-%grad_lls = @(r, eta, dfX) r - eta*dfX ;
+grad = @(x) X_hat'*(X_hat*x)- b;
 
-[x, k, error_abs, residuals] = mgd_eqn(X_hat, x0, w_star, resid_fun, tol, 0.03, b, 1e4, false, true);
+[x, k, error_abs] = mgd_eqn(X_hat, grad, x0, w_star, tol, 0.03, 1e4, false, true);
 disp(norm(x-w_star)/norm(w_star));
 
 errors = error_abs./norm(w_star);
@@ -30,8 +28,6 @@ for i = 2:length(errors)
     sub(i) = sub(1)/i;
 end
 
-%semilogy(lin);
-%hold on
 semilogy(sub);
 hold on;
 semilogy(errors)
