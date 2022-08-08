@@ -106,7 +106,7 @@ function r = compute_direction(grad, s, y, nc)
 %       on Algorithm 7.4 from Jorge Nocedal and Stephen Wright,
 %       "Numerical optimization," Springer Science & Business Media, 2006.
 %
-%Created by Niko Dalla Noce, Alessandro Ristori and Simone Rizzo
+% Created by Niko Dalla Noce, Alessandro Ristori and Simone Rizzo
 
 if nc == 1
     r = grad;
