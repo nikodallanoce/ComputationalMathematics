@@ -7,13 +7,13 @@ rmpath ../utilities;
 % Compute the thin QR factorization
 [Q1y, R1] = thinqr(X_hat, y_hat);
 
-% Compute the solution
+% Compute our solution
 opts.UT = true;
-x_linsolve = linsolve(R1, Q1y, opts);
+w = linsolve(R1, Q1y, opts);
 
 % Compute matlab solution
 [Q_t, R_t] = qr(X_hat, "econ");
-x_star = X_hat\y_hat;
+w_star = X_hat\y_hat;
 
-% [Q1, R1] = thinqr(X_hat);
-%upper = cond(X_hat)*norm(Q1'*(X_hat*x-y_hat))/norm(X_hat*x)
+rel_error = norm(w - w_star) / norm(w_star);
+residual = norm(X_hat * w - y_hat) / norm(y_hat);
