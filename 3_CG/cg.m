@@ -1,25 +1,66 @@
-function [x_k, k, errors] = cg(A, x_0, b, tol, x_star)
+function [x_k, k, x_hist] = cg(A, x_0, b, tol, max_iters)
+% Conjugate gradient (cg) non optimal version in which we fully compute
+% A=\hat{X}'*\hat{X}
+% Inputs:
+%       A           input matrix
+%       x0          starting point
+%       b           array of expected values of the form \hat{X}'*\hat{y}
+%       tol         tolerance
+%       max_iters   maximum number of iterations
+%
+% Output:
+%       x_k         solution
+%       k           number of iterations
+%       x_hist      array that keeps track of all the computed points
+%
+% Reference:
+%       Algorithm 5 from our report.
+%
+% Created by Niko Dalla Noce, Alessandro Ristori and Simone Rizzo
+
 r_k = A*x_0 - b; % residual
 p_k = -r_k; % search direction
 x_k = x_0; % current point
-k = 0; % iteration
 tolb = tol*norm(b); % stop condition
-errors = norm(x_star-x_k);
-disp(tolb);
-while(norm(r_k)>tolb)   
+
+% keep track of all the points computed by the method
+x_hist = zeros(length(x_k), max_iters+1);
+x_hist(:, 1) = x_k;
+
+for k=1:max_iters 
     [x_k, r_k, p_k] = iteration(A, r_k, p_k, x_k);
-    errors = [errors norm(x_star - x_k)];
-    k = k+1;
+    x_hist(:, k+1) = x_k;
+    if norm(r_k) <= tolb
+        break;
+    end
 end
+x_hist = x_hist(:, 1:k+1);
 end
 
 function [x_k_next, r_k_next, p_k_next] = iteration(A, r_k, p_k, x_k)
+% Single iteration of conjugate gradient (cg)
+% Inputs:
+%       A           input matrix
+%       r_k         residual at the k-th iteration
+%       p_k         search direction at the k-th iteration
+%       x_k         current point
+%
+% Output:
+%       x_k_next    next point
+%       r_k_next    next residual
+%       p_k_next    next search direction
+%
+% Reference:
+%       Algorithm 5 from our report.
+%
+% Created by Niko Dalla Noce, Alessandro Ristori and Simone Rizzo
+
 % computations to save time efficiently
 r_k_q = r_k'*r_k;
 A_pk = A*p_k;
 
 % update parameters
-a_k = r_k_q/(p_k'*A_pk);
+a_k = r_k_q / (p_k'*A_pk);
 x_k_next = x_k + a_k * p_k;
 r_k_next = r_k + a_k * A_pk;
 B_k_next = (r_k_next' * r_k_next) / r_k_q;
