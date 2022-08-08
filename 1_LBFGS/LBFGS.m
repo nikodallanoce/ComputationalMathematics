@@ -7,13 +7,12 @@ function [xk, k, x_hist] = LBFGS(x0, X, y, l, tol, verbose, max_iters)
 %       l           memory size
 %       tol         tolerance
 %       verbose     print state of the L-BFGS during the iterations
-%       x_star      optimal solution
 %       max_iters   maximum number of iterations
 %
 % Output:
 %       xk          solution
 %       k           number of iterations spent by the method
-%       x_hist      array that keeps track of all the points computed
+%       x_hist      array that keeps track of all the computed points
 %
 % Reference:
 %       Algorithm 2 from our report, which is in turn based
@@ -70,7 +69,7 @@ for k=1:max_iters
         fprintf("Curvature condition does not hold\n");
     end
 
-    % compute metrics
+    % save current point
     x_hist(:, k+1) = xk;
 
     % print current state of L-BFGS

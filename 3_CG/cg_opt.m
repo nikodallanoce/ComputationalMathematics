@@ -1,17 +1,17 @@
-function [x_k, k, errors, errors_A] = cg_opt(A, x_0, b, tol, w_star)
-% Conjugate gradient (cg) optimal version
+function [x_k, k, x_hist] = cg_opt(A, x_0, b, tol, max_iters)
+% Conjugate gradient (cg) optimal version in which we do not explicitly
+% compute the matrix X_hat'*X_hat
 % Inputs:
 %       A           sparse input matrix
 %       x0          starting point
-%       b           array of expected values
+%       b           array of expected values of the form \hat{X}'*\hat{y}
 %       tol         tolerance
-%       w_star      optimal solution
+%       max_iters   maximum number of iterations
 %
 % Output:
 %       x_k         solution
 %       k           number of iterations
-%       errors      array of errors norm(x_k-w_star)/norm(w_star)
-%       errors_A    errors computed on the norm of A
+%       x_hist      array that keeps track of all the computed points
 %
 % Reference:
 %       Algorithm 5 from our report.
@@ -21,19 +21,20 @@ function [x_k, k, errors, errors_A] = cg_opt(A, x_0, b, tol, w_star)
 r_k = A'*(A*x_0) - b; % residual
 p_k = -r_k; % search direction
 x_k = x_0; % current point
-k = 0; % iteration
-tolb = tol*norm(b); % stop condition
-norm_A = @(w) (w-w_star)'*A'*A*(w-w_star);
-errors = norm(w_star-x_k);
-errors_A = norm_A(x_0); 
+tolb = tol * norm(b); % stop condition
 
+% keep track of all the points computed by the method
+x_hist = zeros(length(x_k), max_iters+1);
+x_hist(:, 1) = x_k;
 
-while(norm(r_k)>tolb && k<1000)
+for k=1:max_iters
     [x_k, r_k, p_k] = iteration(A, r_k, p_k, x_k);
-    errors = [errors norm(w_star - x_k)];
-    errors_A = [errors_A norm_A(x_k)];
-    k = k+1;
+    x_hist(:, k+1) = x_k;
+    if norm(r_k) <= tolb
+        break;
+    end
 end
+x_hist = x_hist(:, 1:k+1);
 end
 
 function [x_k_next, r_k_next, p_k_next] = iteration(A, r_k, p_k, x_k)

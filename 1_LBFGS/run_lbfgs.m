@@ -1,11 +1,12 @@
 clear;
+
 addpath ../utilities;
-[X_hat, y_hat, w, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", 1e2);
+[X_hat, y_hat, ~, w_star] = build_matrices("../datasets/ML-CUP21-TR.csv", 1e2);
 [f_lls, grad_lls] = build_lls(X_hat, y_hat);
 rmpath ../utilities;
 
 % Compute the solution using L-BFGS
-w = zeros(size(w)); % starting point
+w = zeros(size(w_star)); % starting point
 b = X_hat' * y_hat;
 [w_our, k, w_hist] = LBFGS(w, sparse(X_hat), b, 20, 1e-14, true, 1000);
 
