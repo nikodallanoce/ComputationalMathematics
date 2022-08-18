@@ -8,12 +8,13 @@ rmpath ../utilities;
 
 % Compute the solution using standard momentum descent (heavy ball)
 b = X_hat' * y_hat;
-x0 = zeros(length(w_star),1);
+x0 = zeros(length(w_star), 1);
 tol = 1e-12;
 
 grad = @(x) X_hat'*(X_hat*x)- b;
 
 [x, k, w_hist] = mgd_eqn(X_hat, grad, x0, tol, 0.03, 1e4, true);
-disp(norm(x-w_star)/norm(w_star));
+
+% Compute the relative errors and the final residual
 re_errors = vecnorm(w_hist - w_star) / norm(w_star);
 residual = norm(X_hat * w_hist(:, end) - y_hat) / norm(y_hat);
