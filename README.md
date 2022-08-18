@@ -18,19 +18,32 @@ with $X$ the (tall thin) matrix from the ML-cup dataset by prof. Micheli, and $y
 ```bash
 📂ComputationalMathematics
 ├── 📂1_LBFGS  # Limited-memory quasi-Newton method
+│   ├── 📄LBFGS.m # implementation of limited memory BFGS
+│   ├── 📄run_lbfgs.m # choose the hyper-parameters and run L-BFGS
 │   └── 📄...
 ├── 📂2_QR  # Thin QR factorization with Householder reflectors
+│   ├── 📄check_accuracy_thinqr.m # computes the accuracy of our implementation
+│   ├── 📄householder_vector.m # builds the householder reflectors
+│   ├── 📄thinqr.m # implementation of thin QR factorization
+│   ├── 📄run_qr.m # choose the hyper-parameters and run thin QR
 │   └── 📄...
 ├── 📂3_CG  # Conjugate gradient method
+│   ├── 📄cg.m # non-optmized version of conjugate gradient
+│   ├── 📄cg_opt.m # optmized implementation of conjugate gradient
+│   ├── 📄run_cg.m # choose the hyper-parameters and run conjugate gradient
 │   └── 📄...
 ├── 📂4_SMD  # Standard momentum descent (heavy ball)
+│   ├── 📄smd.m # implementation of standard momentum descent
+│   ├── 📄run_smd.m # choose the hyper-parameters and run standard momentum descent
 │   └── 📄...
 ├── 📂datasets  # Datasets used by the project
-│   └── 🗃️ ML-CUP21-TR.csv
+│   └── 🗃️ML-CUP21-TR.csv
 ├── 📂report  # Project report
-│   └── 📄...
+│   ├── 📓DallaNoce_Ristori_Rizzo.pdf # report of our project
+│   └── 📄... # latex files
 ├── 📂utilities  # Methods for building the matrices, functions and gradients
-│   ├── 📄build_lls.m # method to build the function and gradient of lls
-│   └── 📄build_matrices.m # method to build the required matrices
+│   ├── 📄build_lls.m # builds the function and gradient of lls
+│   ├── 📄build_matrices.m # builds the required matrices
+│   └── 📄compare_scalability # comparison of each method's scalability
 └── 📄README.md
 ```
