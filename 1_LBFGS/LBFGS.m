@@ -1,5 +1,7 @@
-function [xk, k, x_hist] = LBFGS(x0, X, y, l, tol, verbose, max_iters)
+function [x_k, k, x_hist] = LBFGS(x0, X, y, l, tol, verbose, max_iters, callback)
 % Limited memory BFGS (L-BFGS)
+%
+% [xk, k, x_hist] = LBFGS(x0, X, y, l, tol, verbose, max_iters)
 % Inputs:
 %       x0          starting point
 %       X           input matrix
@@ -21,15 +23,21 @@ function [xk, k, x_hist] = LBFGS(x0, X, y, l, tol, verbose, max_iters)
 %
 % Created by Niko Dalla Noce, Alessandro Ristori and Simone Rizzo
 
-xk = x0; % starting point
+x_k = x0; % starting point
 grad = @(w) X'*(X*w) - y; % gradient
 grad_k = grad(x0);
-sm = zeros(length(xk), l); % matrix of displacements
-ym = zeros(length(xk), l); % matrix of differences between gradients
+sm = zeros(length(x_k), l); % matrix of displacements
+ym = zeros(length(x_k), l); % matrix of differences between gradients
 
 % keep track of all the points computed by the method
-x_hist = zeros(length(xk), max_iters+1);
-x_hist(:, 1) = xk;
+if(nargout>2)
+    x_hist = zeros(length(x_k), max_iters+1);
+    x_hist(:, 1) = x_k;
+end
+
+if exist("callback", "var")
+    callback(x_k, 1);
+end
 
 % print starting state of L-BFGS
 if verbose
@@ -47,20 +55,20 @@ for k=1:max_iters
     alpha = -(grad_k'*pk)/(A_pk'*A_pk);
 
     % update step and gradient
-    xk_prev = xk;
+    xk_prev = x_k;
     grad_prev = grad_k;
-    xk = xk + alpha.* pk;
-    grad_k = grad(xk);
+    x_k = x_k + alpha.* pk;
+    grad_k = grad(x_k);
 
     % memory handling
     if k > l
         sm(:, 1:end-1) = sm(:, 2:end);
         ym(:, 1:end-1) = ym(:, 2:end);
-        sm(:, end) = xk - xk_prev;
+        sm(:, end) = x_k - xk_prev;
         ym(:, end) = grad_k - grad_prev;
         nc = l;
     else
-        sm(:, k) = xk - xk_prev;
+        sm(:, k) = x_k - xk_prev;
         ym(:, k) = grad_k - grad_prev;
         nc = k;
     end
@@ -70,7 +78,13 @@ for k=1:max_iters
     end
 
     % save current point
-    x_hist(:, k+1) = xk;
+    if (nargout>2)
+        x_hist(:, k+1) = x_k;
+    end
+
+    if exist("callback", "var")
+        callback(x_k, k+1);
+    end
 
     % print current state of L-BFGS
     if verbose && (mod(k, 5) == 0 || k == 1)
@@ -87,7 +101,9 @@ end
 if verbose && mod(k, 5) ~= 0
      fprintf('%5d %1.2e\n', k, norm(grad_k));
 end
-x_hist = x_hist(:, 1:k+1);
+if (nargout > 2)
+    x_hist = x_hist(:, 1:k+1);
+end
 end
 
 function r = compute_direction(grad, s, y, nc)
