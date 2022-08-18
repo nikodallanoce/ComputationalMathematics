@@ -1,5 +1,5 @@
 function [x_k, k, x_hist] = mgd_eqn(X, grad, x0, tol, alpha, max_iters, verbose)
-% Performs an Gradient descent approach with momentum.
+% Performs Gradient descent approach with momentum.
 % Inputs:
 %       X           input matrix
 %       grad        gradient of the function
