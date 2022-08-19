@@ -1,11 +1,11 @@
 function [x_k, k, x_hist] = cg_opt(A, x_0, b, tol, max_iters, callback)
 % Conjugate gradient (cg) optimal version in which we do not explicitly
 % compute the matrix X_hat'*X_hat
-% [x_k, k, x_hist] = cg_opt(A, x_0, b, tol, max_iters, callback)
+% [x_k, k, x_hist] = cg_opt(A, x_0, b, tol, max_iters[, callback])
 %
 % If you do not want the history of all the computed x points,
 % use the following alternative version.
-% [x_k, k] = cg_opt(A, x_0, b, tol, max_iters, callback)
+% [x_k, k] = cg_opt(A, x_0, b, tol, max_iters[, callback])
 %
 % Inputs:
 %       A           sparse input matrix
