@@ -16,8 +16,8 @@ max_iters = 1e4;
 
 %global rel_errors, global residual;
 global metrics;
-metrics.rel_errors = zeros(max_iters, 1);
-metrics.residual = zeros(max_iters, 1);
+metrics.rel_errors = -ones(max_iters, 1);
+metrics.residual = -ones(max_iters, 1);
 
 [x, k, w_hist] = smd(X_hat, grad, x0, tol, 0.03, max_iters, true,...
     @(x,k) callback(x, k, w_star, X_hat, y_hat));
