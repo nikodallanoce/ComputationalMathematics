@@ -1,10 +1,10 @@
 function [x_k, k, x_hist] = LBFGS(x0, X, y, l, tol, verbose, max_iters, callback)
 % Limited memory BFGS (L-BFGS)
-% [x_k, k, x_hist] = LBFGS(x0, X, y, l, tol, verbose, max_iters, callback)
+% [x_k, k, x_hist] = LBFGS(x0, X, y, l, tol, verbose, max_iters[, callback])
 %
 % If you do not want the history of all the computed x points,
 % use the following alternative version.
-% [x_k, k] = LBFGS(x0, X, y, l, tol, verbose, max_iters, callback)
+% [x_k, k] = LBFGS(x0, X, y, l, tol, verbose, max_iters[, callback])
 %
 % Inputs:
 %       x0          starting point
