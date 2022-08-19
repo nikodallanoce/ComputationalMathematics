@@ -2,8 +2,8 @@ function [x_k, k, x_hist] = smd(X, grad, x0, tol, alpha, max_iters, verbose, cal
 % Performs Gradient descent approach with momentum.
 % [x_k, k, x_hist] = smd(X, grad, x0, tol, alpha, max_iters, verbose)
 %
-% If you do not want all the the hystory of x points, which requires  use the following 
-% alternative version that does not return and compute it.
+% If you do not want the history of all the computed x points,
+% use the following alternative version.
 % [x_k, k] = smd(X, grad, x0, tol, alpha, max_iters, verbose)
 %
 % Inputs:

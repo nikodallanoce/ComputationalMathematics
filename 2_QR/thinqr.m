@@ -1,6 +1,7 @@
 function [Q1y, R1] = thinqr(A, y)
 % Thin QR factorization
 % [Q1y, R1] = thinqr(A, y)
+%
 % Inputs:
 %       A           input matrix
 %       y           array of expected values

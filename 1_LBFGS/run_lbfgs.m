@@ -10,8 +10,8 @@ b = X_hat' * y_hat;
 max_iters = 1e3;
 
 global metrics;
-metrics.rel_errors = zeros(max_iters, 1);
-metrics.residual = zeros(max_iters, 1);
+metrics.rel_errors = -ones(max_iters, 1);
+metrics.residual = -ones(max_iters, 1);
 
 [w_our, k, w_hist] = LBFGS(w, sparse(X_hat), b, 20, 1e-14, true, max_iters,...
     @(x,k) callback(x, k, w_star, X_hat, y_hat));
