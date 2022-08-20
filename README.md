@@ -44,6 +44,7 @@ with $X$ the (tall thin) matrix from the ML-cup dataset by prof. Micheli, and $y
 ├── 📂utilities  # Methods for building the matrices, functions and gradients
 │   ├── 📄build_lls.m # builds the function and gradient of lls
 │   ├── 📄build_matrices.m # builds the required matrices
-│   └── 📄compare_scalability # comparison of each method's scalability
+│   ├── 📄callback.m # computes the metrics
+│   └── 📄compare_scalability # comparison of each method scalability
 └── 📄README.md
 ```
