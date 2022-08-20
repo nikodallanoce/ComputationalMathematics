@@ -1,6 +1,12 @@
-function [x_k, k, x_hist] = cg_opt(A, x_0, b, tol, max_iters)
+function [x_k, k, x_hist] = cg_opt(A, x_0, b, tol, max_iters, callback)
 % Conjugate gradient (cg) optimal version in which we do not explicitly
 % compute the matrix X_hat'*X_hat
+% [x_k, k, x_hist] = cg_opt(A, x_0, b, tol, max_iters[, callback])
+%
+% If you do not want the history of all the computed x points,
+% use the following alternative version.
+% [x_k, k] = cg_opt(A, x_0, b, tol, max_iters[, callback])
+%
 % Inputs:
 %       A           sparse input matrix
 %       x0          starting point
@@ -24,17 +30,31 @@ x_k = x_0; % current point
 tolb = tol * norm(b); % stop condition
 
 % keep track of all the points computed by the method
-x_hist = zeros(length(x_k), max_iters+1);
-x_hist(:, 1) = x_k;
+if (nargout>2)
+    x_hist = zeros(length(x_k), max_iters+1);
+    x_hist(:, 1) = x_k;
+end
+
+if exist("callback", "var")
+    callback(x_k, 1);
+end
 
 for k=1:max_iters
     [x_k, r_k, p_k] = iteration(A, r_k, p_k, x_k);
-    x_hist(:, k+1) = x_k;
+
+    if exist("callback", "var")
+       callback(x_k, k+1);
+    end
+    if (nargout>2)
+        x_hist(:, k+1) = x_k;
+    end
     if norm(r_k) <= tolb
         break;
     end
 end
-x_hist = x_hist(:, 1:k+1);
+if (nargout>2)
+    x_hist = x_hist(:, 1:k+1);
+end
 end
 
 function [x_k_next, r_k_next, p_k_next] = iteration(A, r_k, p_k, x_k)
