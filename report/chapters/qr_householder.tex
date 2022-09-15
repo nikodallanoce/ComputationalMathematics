@@ -78,6 +78,7 @@ Starting from \eqref{eq:qr_factorization}, we can write
 \end{aligned}
 \end{equation}
 \footnotetext{Holds since $\lVert Qx \rVert=\lVert x \rVert$ when $Q$ is orthogonal.}
+
 \noindent where $R_1$ and $Q_1$ are the matrices as seen in \eqref{eq:qr_factorization} and $Q_2^T\hat{y}$ is the residual of the norm, that is the optimum of our optimization problem.
 \vspace{3mm}
 
@@ -341,7 +342,7 @@ Since the only hyper-parameter for the thin QR is $\lambda$ we will show how the
 \begin{table}[H]
 \centering
 \begin{tabular}{c|c|c|c|c} \hline \hline
-    $\lambda$ & $\frac{\lVert w - w^* \lVert}{\lVert w^*\rVert}$ & $\frac{\lVert \hat{X}w - y \lVert }{\lVert y \lVert}$ & $\lVert \nabla f(w) \lVert$ & $\frac{\kappa(\hat{X})}{\lVert \hat{X}w \rVert}\lVert r_1 \rVert$ \eqref{eq:qr_upper_bound_performance} \\ \hline \hline
+    $\lambda$ & $\frac{\lVert w - w^* \lVert}{\lVert w^*\rVert}$ & $\frac{\lVert \hat{X}w - \hat{y}\rVert }{\lVert \hat{y} \rVert}$ & $\lVert \nabla f(w) \rVert$ & $\frac{\kappa(\hat{X})}{\lVert \hat{X}w \rVert}\lVert r_1 \rVert$ \eqref{eq:qr_upper_bound_performance} \\ \hline \hline
     
     \rowcolor{gray!30} $10^4$ & $7.3825 \times 10^{-14}$ & $9.9959 \times 10^{-1}$& $1.8069 \times 10^{-10}$ & $1.0512 \times 10^{-13}$ \\
     

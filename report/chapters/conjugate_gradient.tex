@@ -29,7 +29,7 @@ where $A \in \mathbb{R}^{n\times n}$ is a symmetric positive definite matrix \fo
     \label{eq:cg_conjugacy}
 \end{equation}
 
-\noindent \eqref{eq:cg_conjugacy} is vital to minimize \eqref{eq:cg_minimization_function} in, at maximum, $n$ steps, but first we need to consider the \textit{conjugate direction} method. Given a starting point $x_0 \in \mathbb{R}^n$ a a set of conjugate directions $\{ p_0, p_1 \dots p_{n-1}\}$, the sequence $\{ x_k\}$ is generated step by step by
+\noindent \eqref{eq:cg_conjugacy} is vital to minimize \eqref{eq:cg_minimization_function} in, at maximum, $n$ steps, but first we need to consider the \textit{conjugate direction} method. Given a starting point $x_0 \in \mathbb{R}^n$ and a set of conjugate directions $\{ p_0, p_1 \dots p_{n-1}\}$, the sequence $\{ x_k\}$ is generated step by step by
 \begin{equation}
     x_{k+1} = x_k + \alpha_kp_k
     \label{eq:cg_step}
@@ -318,7 +318,7 @@ The number of the distinct eigenvalues of $A = \hat{X}^{T} \hat{X}$ is 13, as st
 \begin{table}[H]
 \centering
 \begin{tabular}{c|c|c|c|c} \hline \hline
-    $\lambda$&$\frac{\lVert w - w^{*} \lVert}{\rVert w^{*} \lVert}$ & $\frac{\lVert \hat{X}w - y \lVert }{\lVert y \lVert}$ & steps & time (sec)\\ \hline \hline
+    $\lambda$&$\frac{\lVert w - w^{*} \lVert}{\rVert w^{*} \lVert}$ & $\frac{\lVert \hat{X}w - \hat{y} \lVert }{\lVert \hat{y} \lVert}$ & steps & time (sec)\\ \hline \hline
     
     \rowcolor{gray!30} $10^4$ & $(2.768 \pm 2.726)\times 10^{-14}$ & $ 9.996 \times 10^{-1} \pm 3.268 \times 10^{-4}$ & $4$& $5.5 \times 10^{-4}$\\
     

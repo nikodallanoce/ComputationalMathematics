@@ -98,7 +98,7 @@ Again, we know that $f$ is strongly convex on $S$, so there are positive constan
 \begin{aligned}
 x_{k+1} - x^* &= x_k - x^* - \eta_k A(x_k - x^*) + \beta(x_k - x_{k-1}) \\
 & = (I - \eta_k A)(x_k - x^*) + \beta_k (x_k - x_{k-1} -x^* + x^*) \\
-& = (I - \eta_k A)(x_k - x^*) - \beta_k (x_{k-1} - x^*) + \beta(x_k - x^*)\\
+& = (I - \eta_k A)(x_k - x^*) - \beta_k (x_{k-1} - x^*) + \beta_k (x_k - x^*)\\
 &= \left((1+\beta_k)I-\eta_k A)\right(x_k - x^*) - \beta_k (x_{k-1} - x^*)
 \end{aligned}
 \end{equation}
@@ -263,7 +263,7 @@ By looking at \autoref{tab:smd_results}, it is possible to notice that the relat
 \small
 \centering
 \begin{tabular}{c|c|c|c|c|c} \hline \hline
-    $\lambda$& $\beta$ &$\frac{\lVert w - w^{*} \lVert}{\rVert w^{*} \lVert}$ & $\frac{\lVert \hat{X}w - y \lVert }{\lVert y \lVert}$ & steps & time (sec)\\ \hline \hline
+    $\lambda$& $\beta$ &$\frac{\lVert w - w^{*} \lVert}{\rVert w^{*} \lVert}$ & $\frac{\lVert \hat{X}w - \hat{y} \lVert }{\lVert \hat{y} \lVert}$ & steps & time (sec)\\ \hline \hline
     
     \rowcolor{gray!30} $10^4$ & $0$ & $ 3.49 \times 10^{-14} \pm 2.15 \times 10^{-14}$ &$9.99 \times 10^{-1} \pm 3.04 \times 10^{-4}$ & $19 \pm 9$& $9.56 \times 10^{-4}$ \\
     
