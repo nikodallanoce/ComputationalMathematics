@@ -1,15 +1,14 @@
 function [u, s] = householder_vector(x)
 % Householder vector
 % Inputs:
-%       x           
+%       x           input array    
 %
 % Output:
-%       Q1y         product between the orthogonal matrix Q1 and y, if y is not
-%                passed then only Q1 is returned
-%       R1          upper triangular matrix
+%       u           householder vector
+%       s           norm of input array
 %
 % Reference:
-%       Algorithm 4 from our report.
+%       Algorithm 3 from our report.
 %
 % Created by Niko Dalla Noce, Alessandro Ristori and Simone Rizzo
 
