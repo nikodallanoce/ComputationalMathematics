@@ -40,9 +40,6 @@ with $X$ the (tall thin) matrix from the ML-cup dataset by prof. Micheli, and $y
 │   └── 📄...
 ├── 📂datasets  # Datasets used by the project
 │   └── 🗃️ML-CUP21-TR.csv
-├── 📂report  # Project report
-│   ├── 📓DallaNoce_Ristori_Rizzo.pdf # report of our project
-│   └── 📄... # latex files
 ├── 📂utilities  # Methods for building the matrices, functions and gradients
 │   ├── 📄build_lls.m # builds the function and gradient of lls
 │   ├── 📄build_matrices.m # builds the required matrices
