@@ -4,7 +4,7 @@ Computational Mathematics for Learning and Data Analysis project for the a.y. 20
 - [Niko Dalla Noce](https://github.com/nikodallanoce)
 - [Alessandro Ristori](https://github.com/RistoAle97)
 - [Simone Rizzo](https://github.com/simone-rizzo)
-## Wilcard Project
+## Wildcard Project
 (P) is the linear least squares problem
 $$\displaystyle \min_{w} \lVert \hat{X}w-\hat{y} \rVert$$
 where
